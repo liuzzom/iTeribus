@@ -1,0 +1,7 @@
+{
+  "name": "iTeribus",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
