@@ -1,11 +1,14 @@
-ion-item-group {
+ion-button{
+    margin-top: 16px;
+    float: right;
+}
+
+.domicile{
     margin-top: 16px;
 }
 
-
 #container {
     margin: 0 auto;
-    width: 95%;
     height: 100%;
     text-align: center;
     position: absolute;

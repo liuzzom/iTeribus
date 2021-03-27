@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-user-info-form',
@@ -7,9 +8,9 @@ import { Component, OnInit } from '@angular/core';
 })
 export class UserInfoFormPage implements OnInit {
 
+
   constructor() { }
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
 }

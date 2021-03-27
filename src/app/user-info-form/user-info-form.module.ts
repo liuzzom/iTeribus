@@ -8,11 +8,14 @@ import { UserInfoFormPageRoutingModule } from './user-info-form-routing.module';
 
 import { UserInfoFormPage } from './user-info-form.page';
 
+import {MatStepperModule} from '@angular/material/stepper';
+
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
+    MatStepperModule,
     UserInfoFormPageRoutingModule
   ],
   declarations: [UserInfoFormPage]
