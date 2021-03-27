@@ -11,6 +11,10 @@ const routes: Routes = [
     redirectTo: 'home',
     pathMatch: 'full'
   },
+  {
+    path: 'user-info-form',
+    loadChildren: () => import('./user-info-form/user-info-form.module').then( m => m.UserInfoFormPageModule)
+  },
 ];
 
 @NgModule({

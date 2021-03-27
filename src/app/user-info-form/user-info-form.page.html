@@ -1,0 +1,122 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>user-info-form</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div id="container">
+    <form>
+
+      <!--Informazioni Anagrafiche-->
+      <ion-item-group>
+
+        <ion-item-divider>
+          <ion-label>Dati Anagrafici</ion-label>
+        </ion-item-divider>
+
+        <ion-item>
+          <ion-label position="floating">Nome</ion-label>
+          <ion-input></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="floating">Cognome</ion-label>
+          <ion-input></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="floating">Data di nascita</ion-label>
+          <ion-datetime displayFormat="DD MM YYYY"></ion-datetime>
+        </ion-item>
+        <ion-item>
+          <ion-label position="floating">Telefono</ion-label>
+          <ion-input inputmode="tel"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="floating">Email</ion-label>
+          <ion-input inputmode="email"></ion-input>
+        </ion-item>
+        
+      </ion-item-group>
+
+      <ion-item-group>
+        <ion-item-divider>
+          <ion-label>Documento</ion-label>
+        </ion-item-divider>
+
+        <ion-item>
+          <ion-label position="floating">Tipo</ion-label>
+          <ion-select interface="action-sheet">
+            <ion-select-option value="cartaIdentità">Carta d'Identità</ion-select-option>
+            <ion-select-option value="passaporto">Passaporto</ion-select-option>
+            <ion-select-option value="patenteDiGuida">Patente di Guida</ion-select-option>
+            <ion-select-option value="permessoDiSoggiorno">Permesso di Soggiorno</ion-select-option>
+          </ion-select>
+        </ion-item>
+
+        <ion-item>
+          <ion-label position="floating">Numero</ion-label>
+          <ion-input></ion-input>
+        </ion-item>
+       
+
+        <ion-item>
+          <ion-label position="floating">Rilasciato da </ion-label>
+          <ion-input></ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-label position="floating">Data di Rilascio</ion-label>
+          <ion-datetime displayFormat="DD MM YYYY"></ion-datetime>
+        </ion-item>
+
+      </ion-item-group>
+
+
+      <!--Residenza-->
+      <ion-item-group>
+        <ion-item-divider>
+          <ion-label>Residenza</ion-label>
+        </ion-item-divider>
+
+        <ion-item>
+          <ion-label position="floating">Città</ion-label>
+          <ion-input></ion-input>
+          <!--poi semmai ci metti una select-->
+        </ion-item>
+        <ion-item>
+          <ion-label position="floating">Provincia</ion-label>
+          <ion-input></ion-input>
+          <!--poi semmai ci metti una select-->
+        </ion-item>
+        <ion-item>
+          <ion-label position="floating">Indirizzo</ion-label>
+          <ion-input></ion-input>
+        </ion-item>
+      </ion-item-group>
+
+      <!--Domicilio/Dimora-->
+      <ion-item-group>
+        <ion-item-divider>
+          <ion-label>Domicilio/Dimora</ion-label>
+        </ion-item-divider>
+
+        <ion-item>
+          <ion-label>Città</ion-label>
+          <ion-input></ion-input>
+          <!--poi semmai ci metti una select-->
+        </ion-item>
+        <ion-item>
+          <ion-label>Provincia</ion-label>
+          <ion-input></ion-input>
+          <!--poi semmai ci metti una select-->
+        </ion-item>
+        <ion-item>
+          <ion-label>Indirizzo</ion-label>
+          <ion-input></ion-input>
+        </ion-item>
+      </ion-item-group>
+    </form>
+  </div>
+
+
+</ion-content>
