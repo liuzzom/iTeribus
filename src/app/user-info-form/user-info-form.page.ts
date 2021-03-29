@@ -44,17 +44,14 @@ export class UserInfoFormPage implements OnInit {
     this.provinces = [];
     this.geoService.getProvinces().subscribe(provinces => {
       this.provinces = provinces.filter(province => province.id_regione === this.selectedRegion);
-      console.log(this.provinces);
     });
   }
 
 
   getMunicipalities() {
-    console.log(this.selectedProvince);
     this.municipalities = [];
     this.geoService.getMunicipalities().subscribe(municipalities => {
       this.municipalities = municipalities.filter(municipality => municipality.provincia === this.selectedProvince);
-      console.log(this.municipalities);
     });
   }
 
@@ -73,17 +70,14 @@ export class UserInfoFormPage implements OnInit {
     this.domicileProvinces = [];
     this.geoService.getProvinces().subscribe(provinces => {
       this.domicileProvinces = provinces.filter(province => province.id_regione === this.selectedDomicileRegion);
-      console.log(this.provinces);
     });
   }
 
 
   getDomicileMunicipalities() {
-    // console.log(this.selectedProvince);
     this.domicileMunicipalities = [];
     this.geoService.getMunicipalities().subscribe(municipalities => {
       this.domicileMunicipalities = municipalities.filter(municipality => municipality.provincia === this.selectedDomicileProvince);
-      // console.log(this.municipalities);
     });
   }
 
