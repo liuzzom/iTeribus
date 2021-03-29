@@ -76,7 +76,7 @@
             <ion-item>
               <ion-label position="floating">Regione</ion-label>
               <ion-select interface="action-sheet"
-                          (ionFocus)="clearResidenceProvMunFields()" (ionChange)="getProvince()"
+                          (ionFocus)="clearProvMunFields('residence')" (ionChange)="getProvince('residence')"
                           [(ngModel)]="selectedRegion" [ngModelOptions]="{standalone: true}">
                 <ion-select-option *ngFor="let region of regions" value="{{region.id_regione}}">{{region.regione}}</ion-select-option>
               </ion-select>
@@ -84,16 +84,16 @@
             <ion-item>
               <ion-label position="floating">Provincia</ion-label>
               <ion-select interface="action-sheet"
-                          (ionFocus)="clearResidenceMunFields()" (ionChange)="getMunicipalities()"
+                          (ionFocus)="clearMunFields('residence')" (ionChange)="getMunicipalities('residence')"
                           [(ngModel)]="selectedProvince" [ngModelOptions]="{standalone: true}">
-                <ion-select-option *ngFor="let province of provinces" value="{{province.sigla}}">{{province.provincia}}</ion-select-option>
+                <ion-select-option *ngFor="let province of residenceProvinces" value="{{province.sigla}}">{{province.provincia}}</ion-select-option>
               </ion-select>
             </ion-item>
             <ion-item>
               <ion-label position="floating">Città</ion-label>
               <ion-select interface="action-sheet"
                           [(ngModel)]="selectedMunicipality" [ngModelOptions]="{standalone: true}">
-                <ion-select-option *ngFor="let municipality of municipalities" value="{{municipality.comune}}">{{municipality.comune}}</ion-select-option>
+                <ion-select-option *ngFor="let municipality of residenceMunicipalities" value="{{municipality.comune}}">{{municipality.comune}}</ion-select-option>
               </ion-select>
             </ion-item>
             <ion-item>
@@ -116,15 +116,15 @@
             <ion-item>
               <ion-label position="floating">Regione</ion-label>
               <ion-select interface="action-sheet"
-                          (ionFocus)="clearDomicileProvMunFields()" (ionChange)="getDomicileProvince()"
+                          (ionFocus)="clearProvMunFields('domicile')" (ionChange)="getProvince('domicile')"
                           [(ngModel)]="selectedDomicileRegion" [ngModelOptions]="{standalone: true}">
-                <ion-select-option *ngFor="let region of domicileRegions" value="{{region.id_regione}}">{{region.regione}}</ion-select-option>
+                <ion-select-option *ngFor="let region of regions" value="{{region.id_regione}}">{{region.regione}}</ion-select-option>
               </ion-select>
             </ion-item>
             <ion-item>
               <ion-label position="floating">Provincia</ion-label>
               <ion-select interface="action-sheet"
-                          (ionFocus)="clearDomicileMunFields()" (ionChange)="getDomicileMunicipalities()"
+                          (ionFocus)="clearMunFields('domicile')" (ionChange)="getMunicipalities('domicile')"
                           [(ngModel)]="selectedDomicileProvince" [ngModelOptions]="{standalone: true}">
                 <ion-select-option *ngFor="let province of domicileProvinces" value="{{province.sigla}}">{{province.provincia}}</ion-select-option>
               </ion-select>
