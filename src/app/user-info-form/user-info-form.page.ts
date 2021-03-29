@@ -13,6 +13,7 @@ import { Municipality } from "../../domain-model/Municipality";
 export class UserInfoFormPage implements OnInit {
 
   anagraphicFormGroup: FormGroup;
+  documentFormGroup: FormGroup;
 
   regions: Region[];
 
@@ -43,6 +44,13 @@ export class UserInfoFormPage implements OnInit {
       dateOfBirth: new FormControl(Date.now(), [Validators.required]),
       phoneNumber: new FormControl('', Validators.required), // qui come valore iniziale ci va una stringa?
       email: new FormControl('', Validators.email)
+    });
+
+    this.documentFormGroup = this.formBuilder.group({
+      type: new FormControl('', [Validators.required]),
+      number: new FormControl('', [Validators.required]),
+      issuingAuthority: new FormControl('', [Validators.required]),
+      issueDate: new FormControl(Date.now(), [Validators.required])
     });
 
     this.geoService.getRegions().subscribe(regions => {

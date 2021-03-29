@@ -38,12 +38,12 @@
         </form>
       </mat-step>
 
-      <mat-step label="Documento">
-        <form>
+      <mat-step label="Documento" [stepControl]="documentFormGroup">
+        <form [formGroup]="documentFormGroup">
           <ion-item-group>
             <ion-item>
               <ion-label position="floating">Tipo</ion-label>
-              <ion-select interface="action-sheet">
+              <ion-select interface="action-sheet" formControlName="type">
                 <ion-select-option value="cartaIdentità">Carta d'Identità</ion-select-option>
                 <ion-select-option value="patenteDiGuida">Patente di Guida</ion-select-option>
                 <ion-select-option value="passaporto">Passaporto</ion-select-option>
@@ -51,15 +51,15 @@
             </ion-item>
             <ion-item>
               <ion-label position="floating">Numero</ion-label>
-              <ion-input></ion-input>
+              <ion-input formControlName="number"></ion-input>
             </ion-item>
             <ion-item>
               <ion-label position="floating">Rilasciato da</ion-label>
-              <ion-input></ion-input>
+              <ion-input formControlName="issuingAuthority"></ion-input>
             </ion-item>
             <ion-item>
               <ion-label position="floating">Data di Rilascio</ion-label>
-              <ion-datetime displayFormat="DD MM YYYY"></ion-datetime>
+              <ion-datetime formControlName="issueDate" displayFormat="DD MM YYYY"></ion-datetime>
             </ion-item>
           </ion-item-group>
         </form>
