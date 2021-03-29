@@ -73,16 +73,28 @@
             <ion-item-divider>
               <ion-label>Residenza</ion-label>
             </ion-item-divider>
-
             <ion-item>
-              <ion-label position="floating">Città</ion-label>
-              <ion-input></ion-input>
-              <!--poi semmai ci metti una select-->
+              <ion-label position="floating">Regione</ion-label>
+              <ion-select interface="action-sheet"
+                          (ionFocus)="clearResidenceProvMunFields()" (ionChange)="getProvince()"
+                          [(ngModel)]="selectedRegion" [ngModelOptions]="{standalone: true}">
+                <ion-select-option *ngFor="let region of regions" value="{{region.id_regione}}">{{region.regione}}</ion-select-option>
+              </ion-select>
             </ion-item>
             <ion-item>
               <ion-label position="floating">Provincia</ion-label>
-              <ion-input></ion-input>
-              <!--poi semmai ci metti una select-->
+              <ion-select interface="action-sheet"
+                          (ionFocus)="clearResidenceMunFields()" (ionChange)="getMunicipalities()"
+                          [(ngModel)]="selectedProvince" [ngModelOptions]="{standalone: true}">
+                <ion-select-option *ngFor="let province of provinces" value="{{province.sigla}}">{{province.provincia}}</ion-select-option>
+              </ion-select>
+            </ion-item>
+            <ion-item>
+              <ion-label position="floating">Città</ion-label>
+              <ion-select interface="action-sheet"
+                          [(ngModel)]="selectedMunicipality" [ngModelOptions]="{standalone: true}">
+                <ion-select-option *ngFor="let municipality of municipalities" value="{{municipality.comune}}">{{municipality.comune}}</ion-select-option>
+              </ion-select>
             </ion-item>
             <ion-item>
               <ion-label position="floating">Indirizzo</ion-label>
@@ -101,16 +113,28 @@
             <ion-item-divider>
               <ion-label>Domicilio/Dimora</ion-label>
             </ion-item-divider>
-
             <ion-item>
-              <ion-label>Città</ion-label>
-              <ion-input></ion-input>
-              <!--poi semmai ci metti una select-->
+              <ion-label position="floating">Regione</ion-label>
+              <ion-select interface="action-sheet"
+                          (ionFocus)="clearDomicileProvMunFields()" (ionChange)="getDomicileProvince()"
+                          [(ngModel)]="selectedDomicileRegion" [ngModelOptions]="{standalone: true}">
+                <ion-select-option *ngFor="let region of domicileRegions" value="{{region.id_regione}}">{{region.regione}}</ion-select-option>
+              </ion-select>
             </ion-item>
             <ion-item>
-              <ion-label>Provincia</ion-label>
-              <ion-input></ion-input>
-              <!--poi semmai ci metti una select-->
+              <ion-label position="floating">Provincia</ion-label>
+              <ion-select interface="action-sheet"
+                          (ionFocus)="clearDomicileMunFields()" (ionChange)="getDomicileMunicipalities()"
+                          [(ngModel)]="selectedDomicileProvince" [ngModelOptions]="{standalone: true}">
+                <ion-select-option *ngFor="let province of domicileProvinces" value="{{province.sigla}}">{{province.provincia}}</ion-select-option>
+              </ion-select>
+            </ion-item>
+            <ion-item>
+              <ion-label position="floating">Città</ion-label>
+              <ion-select interface="action-sheet"
+                          [(ngModel)]="selectedDomicileMunicipality" [ngModelOptions]="{standalone: true}">
+                <ion-select-option *ngFor="let municipality of domicileMunicipalities" value="{{municipality.comune}}">{{municipality.comune}}</ion-select-option>
+              </ion-select>
             </ion-item>
             <ion-item>
               <ion-label>Indirizzo</ion-label>
