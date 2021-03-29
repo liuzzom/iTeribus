@@ -10,29 +10,29 @@
   <div id="container">
 
     <mat-vertical-stepper linear>
-      <mat-step label="Dati Anagrafici">
-        <form>
+      <mat-step label="Dati Anagrafici" [stepControl]="anagraphicFormGroup">
+        <form [formGroup]="anagraphicFormGroup"> 
           <!--Informazioni Anagrafiche-->
           <ion-item-group>
             <ion-item>
               <ion-label position="floating">Nome</ion-label>
-              <ion-input></ion-input>
+              <ion-input formControlName="name"></ion-input>
             </ion-item>
             <ion-item>
               <ion-label position="floating">Cognome</ion-label>
-              <ion-input></ion-input>
+              <ion-input formControlName="surname"></ion-input>
             </ion-item>
             <ion-item>
               <ion-label position="floating">Data di nascita</ion-label>
-              <ion-datetime displayFormat="DD MM YYYY"></ion-datetime>
+              <ion-datetime formControlName="dateOfBirth" displayFormat="DD MM YYYY"></ion-datetime>
             </ion-item>
             <ion-item>
               <ion-label position="floating">Telefono</ion-label>
-              <ion-input inputmode="tel"></ion-input>
+              <ion-input formControlName="phoneNumber" inputmode="tel"></ion-input>
             </ion-item>
             <ion-item>
               <ion-label position="floating">Email</ion-label>
-              <ion-input inputmode="email"></ion-input>
+              <ion-input formControlName="email" inputmode="email"></ion-input>
             </ion-item>
           </ion-item-group>
         </form>
@@ -45,9 +45,8 @@
               <ion-label position="floating">Tipo</ion-label>
               <ion-select interface="action-sheet">
                 <ion-select-option value="cartaIdentità">Carta d'Identità</ion-select-option>
-                <ion-select-option value="passaporto">Passaporto</ion-select-option>
                 <ion-select-option value="patenteDiGuida">Patente di Guida</ion-select-option>
-                <ion-select-option value="permessoDiSoggiorno">Permesso di Soggiorno</ion-select-option>
+                <ion-select-option value="passaporto">Passaporto</ion-select-option>
               </ion-select>
             </ion-item>
             <ion-item>
