@@ -1,10 +1,11 @@
+import { StorageService } from './../services/storage.service';
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { GeoService } from "../services/geo.service";
-import { Region } from "../../domain-model/Region";
-import { Province } from "../../domain-model/Province";
-import { Municipality } from "../../domain-model/Municipality";
-import {DatePipe} from "@angular/common";
+import { GeoService } from '../services/geo.service';
+import { Region } from '../../domain-model/Region';
+import { Province } from '../../domain-model/Province';
+import { Municipality } from '../../domain-model/Municipality';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-user-info-form',
@@ -34,10 +35,11 @@ export class UserInfoFormPage implements OnInit {
 
 
   constructor(
+    private datePipe: DatePipe,
     private formBuilder: FormBuilder,
     private geoService: GeoService,
-    private datePipe: DatePipe
-  ) {}
+    private storageService: StorageService
+  ) { }
 
   ngOnInit() {
     this.domicileChecked = false;
@@ -176,14 +178,14 @@ export class UserInfoFormPage implements OnInit {
     }
   }
 
-  private capitalize(str: string){
+  private capitalize(str: string) {
     return str.split(' ').map(str => str.charAt(0).toUpperCase() + str.slice(1)).join(' ');
   }
 
   addUserInfo() {
 
-    let name = this.capitalize(this.anagraphicFormGroup.get('name').value);
-    let surname = this.capitalize(this.anagraphicFormGroup.get('surname').value);
+    const name = this.capitalize(this.anagraphicFormGroup.get('name').value);
+    const surname = this.capitalize(this.anagraphicFormGroup.get('surname').value);
 
     let userData: any = {
       anagraphic: {
@@ -206,10 +208,10 @@ export class UserInfoFormPage implements OnInit {
       }
     };
 
-    if(this.residenceDomicileFormGroup.get('domicileRegion').value &&
-        this.residenceDomicileFormGroup.get('domicileProvince').value &&
-        this.residenceDomicileFormGroup.get('domicileMunicipalities').value &&
-        this.residenceDomicileFormGroup.get('domicileAddress').value){
+    if (this.residenceDomicileFormGroup.get('domicileRegion').value &&
+      this.residenceDomicileFormGroup.get('domicileProvince').value &&
+      this.residenceDomicileFormGroup.get('domicileMunicipalities').value &&
+      this.residenceDomicileFormGroup.get('domicileAddress').value) {
 
       userData.domicile = {
         province: this.residenceDomicileFormGroup.get('domicileProvince').value,
@@ -224,17 +226,17 @@ export class UserInfoFormPage implements OnInit {
     const relative = this.initialMovementsFormGroup.get('relative').value;
     const familyDoctor = this.initialMovementsFormGroup.get('familyDoctor').value;
 
-    if(work || school || foodMarket || relative || familyDoctor){
+    if (work || school || foodMarket || relative || familyDoctor) {
       userData.movements = {};
 
-      if(work) userData.movements.work = work;
-      if(school) userData.movements.school = school;
-      if(foodMarket) userData.movements.foodMarket = foodMarket;
-      if(relative) userData.movements.relative = relative;
-      if(familyDoctor) userData.movements.familyDoctor = familyDoctor;
+      if (work) { userData.movements.work = work; }
+      if (school) { userData.movements.school = school; }
+      if (foodMarket) { userData.movements.foodMarket = foodMarket; }
+      if (relative) { userData.movements.relative = relative; }
+      if (familyDoctor) { userData.movements.familyDoctor = familyDoctor; }
     }
 
+    this.storageService.set('mauro', userData);
 
-    console.log(userData);
   }
 }
