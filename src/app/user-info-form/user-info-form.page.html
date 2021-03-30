@@ -11,7 +11,7 @@
 
     <mat-vertical-stepper linear>
       <mat-step label="Dati Anagrafici" [stepControl]="anagraphicFormGroup">
-        <form [formGroup]="anagraphicFormGroup"> 
+        <form [formGroup]="anagraphicFormGroup">
           <!--Informazioni Anagrafiche-->
           <ion-item-group>
             <ion-item>
@@ -139,33 +139,34 @@
       </mat-step>
 
       <mat-step label="Spostamenti" optional>
-        <form>
+        <form [formGroup]="initialMovementsFormGroup">
           <ion-item-group>
             <ion-item>
               <ion-label position="floating"> Lavoro</ion-label>
-              <ion-input placeholder="Es. : Piazza G. Matteotti 1"></ion-input>
+              <ion-input formControlName="work" placeholder="Es. : Piazza G. Matteotti 1"></ion-input>
             </ion-item>
             <ion-item>
               <ion-label position="floating"> Scuola</ion-label>
-              <ion-input placeholder="Es. :Piazza G. Matteotti 1"></ion-input>
+              <ion-input formControlName="school" placeholder="Es. :Piazza G. Matteotti 1"></ion-input>
             </ion-item>
             <ion-item>
               <ion-label position="floating"> Spesa Alimentare</ion-label>
-              <ion-input placeholder="Es. :Piazza G. Matteotti 1"></ion-input>
+              <ion-input formControlName="foodMarket" placeholder="Es. :Piazza G. Matteotti 1"></ion-input>
             </ion-item>
             <ion-item>
               <ion-label position="floating"> Familiare/Congiunto</ion-label>
-              <ion-input placeholder="Es. :Piazza G. Matteotti 1"></ion-input>
+              <ion-input formControlName="relative" placeholder="Es. :Piazza G. Matteotti 1"></ion-input>
             </ion-item>
             <ion-item>
               <ion-label position="floating"> Medico di Famiglia</ion-label>
-              <ion-input placeholder="Es. :Piazza G. Matteotti 1"></ion-input>
+              <ion-input formControlName="familyDoctor" placeholder="Es. :Piazza G. Matteotti 1"></ion-input>
             </ion-item>
           </ion-item-group>
         </form>
 
-        <ion-button>
-          SALVA
+        <ion-button (click)="addUserInfo()" >
+          <span class="button-text">SALVA</span>
+          <ion-icon name="save"></ion-icon>
         </ion-button>
 
       </mat-step>

@@ -4,6 +4,7 @@ import { GeoService } from "../services/geo.service";
 import { Region } from "../../domain-model/Region";
 import { Province } from "../../domain-model/Province";
 import { Municipality } from "../../domain-model/Municipality";
+import {DatePipe} from "@angular/common";
 
 @Component({
   selector: 'app-user-info-form',
@@ -11,20 +12,18 @@ import { Municipality } from "../../domain-model/Municipality";
   styleUrls: ['./user-info-form.page.scss'],
 })
 export class UserInfoFormPage implements OnInit {
+  private readonly addressPattern = '^[A-Za-z][a-zàèéìòù]* ([A-Z-a-zàèéìòù]+\\.?)*\\ ?([A-Za-z][a-zàèéìòù]*)? ?([A-Za-zàèéìòù]*)+ (\\d+(\\/?[A-Z[a-z]+)?)';
 
   anagraphicFormGroup: FormGroup;
   documentFormGroup: FormGroup;
   residenceDomicileFormGroup: FormGroup;
+  initialMovementsFormGroup: FormGroup;
 
   regions: Region[];
 
   // ----- Residence ----- \\
   residenceProvinces: Province[] = [];
   residenceMunicipalities: Municipality[] = [];
-
-  selectedRegion: string;
-  selectedProvince: string;
-  selectedMunicipality: string;
 
   // ----- Domicile ----- \\
 
@@ -33,46 +32,55 @@ export class UserInfoFormPage implements OnInit {
   domicileProvinces: Province[] = [];
   domicileMunicipalities: Municipality[] = [];
 
-  selectedDomicileRegion: string;
-  selectedDomicileProvince: string;
-  selectedDomicileMunicipality: string;
-
 
   constructor(
     private formBuilder: FormBuilder,
-    private geoService: GeoService
-  ) {
-  }
+    private geoService: GeoService,
+    private datePipe: DatePipe
+  ) {}
 
   ngOnInit() {
     this.domicileChecked = false;
 
+    // ----- Anagraphic Validators ----- \\
     this.anagraphicFormGroup = this.formBuilder.group({
-      name: new FormControl('G', [Validators.required, Validators.pattern('^[A-Z][a-z]*(\ ([A-Z][a-z]*)?)*')]),
-      surname: new FormControl('B', [Validators.required, Validators.pattern('^[A-Z][a-z]*(\ ([A-Z][a-z]*)?)*')]),
+      name: new FormControl('Antonino Mauro', [Validators.required, Validators.pattern('^[A-Z][a-z]*(\ ([A-Z][a-z]*)?)*')]),
+      surname: new FormControl('Liuzzo', [Validators.required, Validators.pattern('^[A-Z][a-z]*(\ ([A-Z][a-z]*)?)*')]),
       dateOfBirth: new FormControl(new Date().toISOString(), [Validators.required]),
-      phoneNumber: new FormControl('+3978', [Validators.required, Validators.pattern('^\\+?[0-9\ ]*')]),
+      phoneNumber: new FormControl('3489534151', [Validators.required, Validators.pattern('^\\+?[0-9\ ]*')]),
       email: new FormControl('', Validators.email)
     });
 
+    // ----- Document Validators ----- \\
     this.documentFormGroup = this.formBuilder.group({
-      type: new FormControl('', [Validators.required]),
-      number: new FormControl('au7894123', [Validators.required, Validators.pattern('^[a-zA-Z0-9]*$')]),
-      issuingAuthority: new FormControl('Comune di Scandicci', [Validators.required]),
+      type: new FormControl('cartaIdentità', [Validators.required]),
+      number: new FormControl('AX2557411', [Validators.required, Validators.pattern('^[a-zA-Z0-9]*$')]),
+      issuingAuthority: new FormControl('Comune di Campofranco', [Validators.required]),
       issueDate: new FormControl(new Date().toISOString(), [Validators.required])
     });
 
+    // ----- Residence and Domicile Validators ----- \\
     this.residenceDomicileFormGroup = this.formBuilder.group({
       residenceRegion: new FormControl('', [Validators.required]),
       residenceProvince: new FormControl('', [Validators.required]),
       residenceMunicipality: new FormControl('', [Validators.required]),
-      residenceAddress: new FormControl('', [Validators.required]),
+      residenceAddress: new FormControl('', [Validators.required, Validators.pattern(this.addressPattern)]),
       domicileRegion: new FormControl('', []),
       domicileProvince: new FormControl('', []),
       domicileMunicipality: new FormControl('', []),
       domicileAddress: new FormControl('', [])
     });
 
+    // ----- Initial Movement Form ----- \\
+    this.initialMovementsFormGroup = this.formBuilder.group({
+      work: new FormControl('', []),
+      school: new FormControl('Via di Santa Marta 3', []),
+      foodMarket: new FormControl('', []),
+      relative: new FormControl('Via del Gignoro 20', []),
+      familyDoctor: new FormControl('', []),
+    });
+
+    // Get Regions
     this.geoService.getRegions().subscribe(regions => {
       this.regions = regions;
     });
@@ -80,29 +88,23 @@ export class UserInfoFormPage implements OnInit {
 
   toggleCheckbox() {
     this.domicileChecked = !this.domicileChecked;
-    console.log(this.domicileChecked);
 
     if (this.domicileChecked) {
-      console.log('La checkbox è attiva');
-      this.residenceDomicileFormGroup.controls['domicileRegion'].setValidators([Validators.required]);
-      this.residenceDomicileFormGroup.controls['domicileProvince'].setValidators([Validators.required]);
-      this.residenceDomicileFormGroup.controls['domicileMunicipality'].setValidators([Validators.required]);
-      this.residenceDomicileFormGroup.controls['domicileAddress'].setValidators([Validators.required]);
+      // Set Domicile Required Validators
+      this.residenceDomicileFormGroup.setControl('domicileRegion', new FormControl('', [Validators.required]));
+      this.residenceDomicileFormGroup.setControl('domicileProvince', new FormControl('', [Validators.required]));
+      this.residenceDomicileFormGroup.setControl('domicileMunicipality', new FormControl('', [Validators.required]));
+      this.residenceDomicileFormGroup.setControl('domicileAddress',
+        new FormControl('', [Validators.required, Validators.pattern(this.addressPattern)]));
     } else {
-      console.log('La checkbox è disattivata');
-      this.residenceDomicileFormGroup.controls['domicileRegion'].setValidators([]);
-      this.residenceDomicileFormGroup.controls['domicileProvince'].setValidators([]);
-      this.residenceDomicileFormGroup.controls['domicileMunicipality'].setValidators([]);
-      this.residenceDomicileFormGroup.controls['domicileAddress'].setValidators([]);
-
+      // Clear Domicile Fields and Remove Required Validators
+      this.residenceDomicileFormGroup.setControl('domicileRegion', new FormControl('', []));
+      this.residenceDomicileFormGroup.setControl('domicileProvince', new FormControl('', []));
+      this.residenceDomicileFormGroup.setControl('domicileMunicipality', new FormControl('', []));
+      this.residenceDomicileFormGroup.setControl('domicileAddress', new FormControl('', []));
     }
 
     this.residenceDomicileFormGroup.updateValueAndValidity();
-
-    console.log(this.getGeographicalControl('domicileRegion').valid);
-    console.log(this.getGeographicalControl('domicileProvince').valid);
-    console.log(this.getGeographicalControl('domicileMunicipality').valid);
-    console.log(this.getGeographicalControl('domicileAddress').valid);
   }
 
 
@@ -172,5 +174,67 @@ export class UserInfoFormPage implements OnInit {
     } else {
       console.error('no supported mode');
     }
+  }
+
+  private capitalize(str: string){
+    return str.split(' ').map(str => str.charAt(0).toUpperCase() + str.slice(1)).join(' ');
+  }
+
+  addUserInfo() {
+
+    let name = this.capitalize(this.anagraphicFormGroup.get('name').value);
+    let surname = this.capitalize(this.anagraphicFormGroup.get('surname').value);
+
+    let userData: any = {
+      anagraphic: {
+        name: name,
+        surname: surname,
+        dateOfBirth: this.datePipe.transform(this.anagraphicFormGroup.get('dateOfBirth').value, 'dd-MM-YYYY'),
+        phoneNumber: this.anagraphicFormGroup.get('phoneNumber').value.replaceAll(' ', ''),
+        email: this.anagraphicFormGroup.get('email').value
+      },
+      document: {
+        type: this.documentFormGroup.get('type').value,
+        number: this.documentFormGroup.get('number').value.replaceAll(' ', '').toUpperCase(),
+        issuingAuthority: this.documentFormGroup.get('issuingAuthority').value,
+        issueDate: this.datePipe.transform(this.documentFormGroup.get('issueDate').value, 'dd-MM-YYYY')
+      },
+      residence: {
+        province: this.residenceDomicileFormGroup.get('residenceProvince').value,
+        municipality: this.residenceDomicileFormGroup.get('residenceMunicipality').value,
+        address: this.residenceDomicileFormGroup.get('residenceAddress').value
+      }
+    };
+
+    if(this.residenceDomicileFormGroup.get('domicileRegion').value &&
+        this.residenceDomicileFormGroup.get('domicileProvince').value &&
+        this.residenceDomicileFormGroup.get('domicileMunicipalities').value &&
+        this.residenceDomicileFormGroup.get('domicileAddress').value){
+
+      userData.domicile = {
+        province: this.residenceDomicileFormGroup.get('domicileProvince').value,
+        municipality: this.residenceDomicileFormGroup.get('domicileMunicipality').value,
+        address: this.residenceDomicileFormGroup.get('domicileAddress').value
+      };
+    }
+
+    const work = this.initialMovementsFormGroup.get('work').value;
+    const school = this.initialMovementsFormGroup.get('school').value;
+    const foodMarket = this.initialMovementsFormGroup.get('foodMarket').value;
+    const relative = this.initialMovementsFormGroup.get('relative').value;
+    const familyDoctor = this.initialMovementsFormGroup.get('familyDoctor').value;
+
+    if(work || school || foodMarket || relative || familyDoctor){
+      userData.movements = {};
+
+      if(work) userData.movements.work = work;
+      if(school) userData.movements.school = school;
+      if(foodMarket) userData.movements.foodMarket = foodMarket;
+      if(relative) userData.movements.relative = relative;
+      if(familyDoctor) userData.movements.familyDoctor = familyDoctor;
+    }
+
+
+    console.log(userData);
   }
 }
