@@ -205,12 +205,17 @@ export class UserInfoFormPage implements OnInit {
         province: this.residenceDomicileFormGroup.get('residenceProvince').value,
         municipality: this.residenceDomicileFormGroup.get('residenceMunicipality').value,
         address: this.residenceDomicileFormGroup.get('residenceAddress').value
-      }
+      },
+      domicile: {
+        province: this.residenceDomicileFormGroup.get('residenceProvince').value,
+        municipality: this.residenceDomicileFormGroup.get('residenceMunicipality').value,
+        address: this.residenceDomicileFormGroup.get('residenceAddress').value
+      },
     };
 
     if (this.residenceDomicileFormGroup.get('domicileRegion').value &&
       this.residenceDomicileFormGroup.get('domicileProvince').value &&
-      this.residenceDomicileFormGroup.get('domicileMunicipalities').value &&
+      this.residenceDomicileFormGroup.get('domicileMunicipality').value &&
       this.residenceDomicileFormGroup.get('domicileAddress').value) {
 
       userData.domicile = {
@@ -236,7 +241,9 @@ export class UserInfoFormPage implements OnInit {
       if (familyDoctor) { userData.movements.familyDoctor = familyDoctor; }
     }
 
-    this.storageService.set('mauro', userData);
+    this.storageService.set('user', userData);
+
+    
 
   }
 }
