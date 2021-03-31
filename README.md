@@ -1,4 +1,4 @@
-# iTeribus
+# Itineribus
 Un'applicazione per la creazione e la compilazione automatica dei moduli di autodichiarazione COVID 19.
 
 Ulteriori informazioni nel [report](https://docs.google.com/document/d/1wqtGt49JYa-cxfg1eSmvknxqRxlyPq-AfHSQ8bKF3DE/edit?usp=sharing).
