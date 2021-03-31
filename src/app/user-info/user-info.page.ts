@@ -1,3 +1,4 @@
+import { User } from './../../domain-model/User';
 import { StorageService } from './../services/storage.service';
 import {Component, OnInit, OnChanges, SimpleChanges, SimpleChange} from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
@@ -17,7 +18,7 @@ import {delay} from "rxjs/operators";
 })
 export class UserInfoPage implements OnInit{
   private readonly addressPattern = '^[A-Za-z][a-zàèéìòù]* ([A-Z-a-zàèéìòù]+\\.?)*\\ ?([A-Za-z][a-zàèéìòù]*)? ?([A-Za-zàèéìòù]*)+ (\\d+(\\/?[A-Z[a-z]+)?)';
-  private userData;
+  private user: User;
 
   anagraphicFormGroup: FormGroup;
   documentFormGroup: FormGroup;
@@ -47,21 +48,39 @@ export class UserInfoPage implements OnInit{
     public toastController: ToastController
   ) { }
 
+
+  async ngOnInit() {
+    this.domicileChecked = false;
+
+    // Init Form
+    this.initForm();
+
+    // Initialize user
+    this.user = await this.storageService.get('user');
+
+    // Get Regions
+    this.geoService.getRegions().subscribe(  regions => {
+      this.regions = regions;
+      this.fillForm();
+    });
+
+  }
+
   private initForm(){
     // ----- Anagraphic Validators ----- \\
     this.anagraphicFormGroup = this.formBuilder.group({
-      name: new FormControl('Antonino Mauro', [Validators.required, Validators.pattern('^[A-Z][a-z]*(\ ([A-Z][a-z]*)?)*')]),
-      surname: new FormControl('Liuzzo', [Validators.required, Validators.pattern('^[A-Z][a-z]*(\ ([A-Z][a-z]*)?)*')]),
-      dateOfBirth: new FormControl(new Date().toISOString(), [Validators.required]),
-      phoneNumber: new FormControl('3489534151', [Validators.required, Validators.pattern('^\\+?[0-9\ ]*')]),
+      name: new FormControl('', [Validators.required, Validators.pattern('^[A-Z][a-z]*(\ ([A-Z][a-z]*)?)*')]),
+      surname: new FormControl('', [Validators.required, Validators.pattern('^[A-Z][a-z]*(\ ([A-Z][a-z]*)?)*')]),
+      dateOfBirth: new FormControl('', [Validators.required]),
+      phoneNumber: new FormControl('', [Validators.required, Validators.pattern('^\\+?[0-9\ ]*')]),
       email: new FormControl('', Validators.email)
     });
 
     // ----- Document Validators ----- \\
     this.documentFormGroup = this.formBuilder.group({
-      type: new FormControl('cartaIdentità', [Validators.required]),
-      number: new FormControl('AX2557411', [Validators.required, Validators.pattern('^[a-zA-Z0-9]*$')]),
-      issuingAuthority: new FormControl('Comune di Campofranco', [Validators.required]),
+      type: new FormControl('', [Validators.required]),
+      number: new FormControl('', [Validators.required, Validators.pattern('^[a-zA-Z0-9]*$')]),
+      issuingAuthority: new FormControl('', [Validators.required]),
       issueDate: new FormControl(new Date().toISOString(), [Validators.required])
     });
 
@@ -78,22 +97,31 @@ export class UserInfoPage implements OnInit{
     });
   }
 
-  ngOnInit() {
-    console.log(this.regions);
-    this.domicileChecked = false;
+  private fillForm(){
+    this.anagraphicFormGroup.get('name').setValue(this.user.name);
+    this.anagraphicFormGroup.get('surname').setValue(this.user.surname);
+    this.anagraphicFormGroup.get('dateOfBirth').setValue(this.user.dateOfBirth);
+    this.anagraphicFormGroup.get('phoneNumber').setValue(this.user.phoneNumber);
+    this.anagraphicFormGroup.get('email').setValue(this.user.email);
 
-    // Init Form
-    this.initForm();
+    this.documentFormGroup.get('type').setValue(this.user.document.type);
+    this.documentFormGroup.get('number').setValue(this.user.document.number);
+    this.documentFormGroup.get('issuingAuthority').setValue(this.user.document.issuingAuthority);
+    this.documentFormGroup.get('issueDate').setValue(this.user.document.issueDate);
 
-    // Get Regions
-    this.geoService.getRegions().subscribe(  regions => {
-      this.regions = regions;
-      this.residenceDomicileFormGroup.setControl('residenceRegion', new FormControl('15', [Validators.required]));
-    });
-  }
+    this.residenceDomicileFormGroup.get('residenceRegion').setValue(this.user.residence.region);
+    // TODO: getProvinces
+    this.residenceDomicileFormGroup.get('residenceProvince').setValue(this.user.residence.province);
+    // TODO: getMunicipality
+    this.residenceDomicileFormGroup.get('residenceMunicipality').setValue(this.user.residence.municipality);
+    this.residenceDomicileFormGroup.get('residenceAddress').setValue(this.user.residence.address);
 
-  delay(ms: number) {
-    return new Promise( resolve => setTimeout(resolve, ms) );
+    this.residenceDomicileFormGroup.get('domicileRegion').setValue(this.user.domicile.region);
+    // TODO: getProvinces
+    this.residenceDomicileFormGroup.get('domicileProvince').setValue(this.user.domicile.province);
+    // TODO: getMunicipality
+    this.residenceDomicileFormGroup.get('domicileMunicipality').setValue(this.user.domicile.municipality);
+    this.residenceDomicileFormGroup.get('domicileAddress').setValue(this.user.domicile.address);
   }
 
 

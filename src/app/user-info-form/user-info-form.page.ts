@@ -1,3 +1,6 @@
+import { User } from './../../domain-model/User';
+import { Movement } from './../../domain-model/Movement';
+import { Place } from './../../domain-model/Place';
 import { StorageService } from './../services/storage.service';
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
@@ -8,6 +11,7 @@ import { Municipality } from '../../domain-model/Municipality';
 import { DatePipe } from '@angular/common';
 import { ToastController } from '@ionic/angular';
 import { Router } from '@angular/router';
+import { Document } from 'src/domain-model/Document';
 
 @Component({
   selector: 'app-user-info-form',
@@ -192,30 +196,30 @@ export class UserInfoFormPage implements OnInit {
     const name = this.capitalize(this.anagraphicFormGroup.get('name').value);
     const surname = this.capitalize(this.anagraphicFormGroup.get('surname').value);
 
-    let userData: any = {
-      anagraphic: {
-        name: name,
-        surname: surname,
-        dateOfBirth: this.datePipe.transform(this.anagraphicFormGroup.get('dateOfBirth').value, 'dd-MM-YYYY'),
-        phoneNumber: this.anagraphicFormGroup.get('phoneNumber').value.replaceAll(' ', ''),
-        email: this.anagraphicFormGroup.get('email').value
-      },
-      document: {
-        type: this.documentFormGroup.get('type').value,
-        number: this.documentFormGroup.get('number').value.replaceAll(' ', '').toUpperCase(),
-        issuingAuthority: this.documentFormGroup.get('issuingAuthority').value,
-        issueDate: this.datePipe.transform(this.documentFormGroup.get('issueDate').value, 'dd-MM-YYYY')
-      },
-      residence: {
-        province: this.residenceDomicileFormGroup.get('residenceProvince').value,
-        municipality: this.residenceDomicileFormGroup.get('residenceMunicipality').value,
-        address: this.residenceDomicileFormGroup.get('residenceAddress').value
-      },
-      domicile: {
-        province: this.residenceDomicileFormGroup.get('residenceProvince').value,
-        municipality: this.residenceDomicileFormGroup.get('residenceMunicipality').value,
-        address: this.residenceDomicileFormGroup.get('residenceAddress').value
-      },
+    let userData: User = {
+      name: name,
+      surname: surname,
+      dateOfBirth: this.anagraphicFormGroup.get('dateOfBirth').value,
+      phoneNumber: this.anagraphicFormGroup.get('phoneNumber').value.replaceAll(' ', ''),
+      email: this.anagraphicFormGroup.get('email').value,
+      document: new Document(
+        this.documentFormGroup.get('type').value,
+        this.documentFormGroup.get('number').value.replaceAll(' ', '').toUpperCase(),
+        this.documentFormGroup.get('issuingAuthority').value,
+        this.documentFormGroup.get('issueDate').value,
+      ),
+      residence: new Place(
+        this.residenceDomicileFormGroup.get('residenceRegion').value,
+        this.residenceDomicileFormGroup.get('residenceProvince').value,
+        this.residenceDomicileFormGroup.get('residenceMunicipality').value,
+        this.residenceDomicileFormGroup.get('residenceAddress').value
+      ),
+      domicile: new Place(
+        this.residenceDomicileFormGroup.get('residenceRegion').value,
+        this.residenceDomicileFormGroup.get('residenceProvince').value,
+        this.residenceDomicileFormGroup.get('residenceMunicipality').value,
+        this.residenceDomicileFormGroup.get('residenceAddress').value
+      ),
     };
 
     if (this.residenceDomicileFormGroup.get('domicileRegion').value &&
@@ -224,6 +228,7 @@ export class UserInfoFormPage implements OnInit {
       this.residenceDomicileFormGroup.get('domicileAddress').value) {
 
       userData.domicile = {
+        region: this.residenceDomicileFormGroup.get('residenceRegion').value,
         province: this.residenceDomicileFormGroup.get('domicileProvince').value,
         municipality: this.residenceDomicileFormGroup.get('domicileMunicipality').value,
         address: this.residenceDomicileFormGroup.get('domicileAddress').value
@@ -237,14 +242,35 @@ export class UserInfoFormPage implements OnInit {
     const familyDoctor = this.initialMovementsFormGroup.get('familyDoctor').value;
 
     if (work || school || foodMarket || relative || familyDoctor) {
-      userData.movements = {};
 
-      if (work) { userData.movements.work = work; }
-      if (school) { userData.movements.school = school; }
-      if (foodMarket) { userData.movements.foodMarket = foodMarket; }
-      if (relative) { userData.movements.relative = relative; }
-      if (familyDoctor) { userData.movements.familyDoctor = familyDoctor; }
+      if (work) {
+
+        const workMovement = new Movement('Lavoro', 'work', `${userData.domicile.address}, ${userData.domicile.municipality}`, work, '');
+        this.storageService.set(workMovement.name, workMovement);
+
+
+      }
+      if (school) {
+        const schoolMovement = new Movement('Scuola', 'school', `${userData.domicile.address}, ${userData.domicile.municipality}`, school, '');
+        this.storageService.set(schoolMovement.name, schoolMovement);
+      }
+      if (foodMarket) {
+        const foodMarketMovement =
+          new Movement('Spesa', 'foodMarket', `${userData.domicile.address}, ${userData.domicile.municipality}`, foodMarket, '');
+        this.storageService.set(foodMarketMovement.name, foodMarketMovement);
+
+      }
+      if (relative) {
+        const relativeMovement = new Movement('Visita a Parente', 'relative', `${userData.domicile.address}, ${userData.domicile.municipality}`, relative, '');
+        this.storageService.set(relativeMovement.name, relativeMovement);
+      }
+      if (familyDoctor) {
+        const relativeMovement = new Movement('Medico di Famiglia', 'familyDoctor', `${userData.domicile.address}, ${userData.domicile.municipality}`, familyDoctor, '');
+        this.storageService.set(relativeMovement.name, relativeMovement);
+      }
     }
+
+
 
     this.storageService.set('user', userData).then(() => this.successToast()).catch(() => this.unsuccessToast());
   }
@@ -270,28 +296,9 @@ export class UserInfoFormPage implements OnInit {
     this.router.navigate(['/user-info-form']);
   }
 
- /*  async presentToastWithOptions() {
-    const toast = await this.toastController.create({
-      header: 'Toast header',
-      message: 'Click to Close',
-      position: 'top',
-      buttons: [
-        {
-          side: 'start',
-          icon: 'star',
-          text: 'Favorite',
-          handler: () => {
-            console.log('Favorite clicked');
-          }
-        }, {
-          text: 'Done',
-          role: 'cancel',
-          handler: () => {
-            console.log('Cancel clicked');
-          }
-        }
-      ]
-    });
-    toast.present();
-  } */
+  private buildMovement(name: string, reason: string, domicile: Place, endAddress: string): Movement {
+    let movement: Movement;
+
+    return movement;
+  }
 }
