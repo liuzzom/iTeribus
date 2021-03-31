@@ -1,5 +1,5 @@
 import { StorageService } from './../services/storage.service';
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, OnChanges, SimpleChanges, SimpleChange} from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { GeoService } from '../services/geo.service';
 import { Region } from '../../domain-model/Region';
@@ -8,19 +8,21 @@ import { Municipality } from '../../domain-model/Municipality';
 import { DatePipe } from '@angular/common';
 import { ToastController } from '@ionic/angular';
 import { Router } from '@angular/router';
+import {delay} from "rxjs/operators";
 
 @Component({
   selector: 'app-user-info',
   templateUrl: './user-info.page.html',
   styleUrls: ['./user-info.page.scss'],
 })
-export class UserInfoPage implements OnInit {
+export class UserInfoPage implements OnInit{
   private readonly addressPattern = '^[A-Za-z][a-zàèéìòù]* ([A-Z-a-zàèéìòù]+\\.?)*\\ ?([A-Za-z][a-zàèéìòù]*)? ?([A-Za-zàèéìòù]*)+ (\\d+(\\/?[A-Z[a-z]+)?)';
+  private userData;
 
   anagraphicFormGroup: FormGroup;
   documentFormGroup: FormGroup;
   residenceDomicileFormGroup: FormGroup;
-  initialMovementsFormGroup: FormGroup;
+  // initialMovementsFormGroup: FormGroup;
 
   regions: Region[];
 
@@ -45,11 +47,7 @@ export class UserInfoPage implements OnInit {
     public toastController: ToastController
   ) { }
 
-  ngOnInit() {
-    this.domicileChecked = false;
-
-    this.storageService.get('user').then();
-
+  private initForm(){
     // ----- Anagraphic Validators ----- \\
     this.anagraphicFormGroup = this.formBuilder.group({
       name: new FormControl('Antonino Mauro', [Validators.required, Validators.pattern('^[A-Z][a-z]*(\ ([A-Z][a-z]*)?)*')]),
@@ -78,20 +76,24 @@ export class UserInfoPage implements OnInit {
       domicileMunicipality: new FormControl('', []),
       domicileAddress: new FormControl('', [])
     });
+  }
 
-    // ----- Initial Movement Form ----- \\
-    this.initialMovementsFormGroup = this.formBuilder.group({
-      work: new FormControl('', []),
-      school: new FormControl('Via di Santa Marta 3', []),
-      foodMarket: new FormControl('', []),
-      relative: new FormControl('Via del Gignoro 20', []),
-      familyDoctor: new FormControl('', []),
-    });
+  ngOnInit() {
+    console.log(this.regions);
+    this.domicileChecked = false;
+
+    // Init Form
+    this.initForm();
 
     // Get Regions
-    this.geoService.getRegions().subscribe(regions => {
+    this.geoService.getRegions().subscribe(  regions => {
       this.regions = regions;
+      this.residenceDomicileFormGroup.setControl('residenceRegion', new FormControl('15', [Validators.required]));
     });
+  }
+
+  delay(ms: number) {
+    return new Promise( resolve => setTimeout(resolve, ms) );
   }
 
 
@@ -232,7 +234,7 @@ export class UserInfoPage implements OnInit {
       };
     }
 
-    const work = this.initialMovementsFormGroup.get('work').value;
+    /*const work = this.initialMovementsFormGroup.get('work').value;
     const school = this.initialMovementsFormGroup.get('school').value;
     const foodMarket = this.initialMovementsFormGroup.get('foodMarket').value;
     const relative = this.initialMovementsFormGroup.get('relative').value;
@@ -246,7 +248,7 @@ export class UserInfoPage implements OnInit {
       if (foodMarket) { userData.movements.foodMarket = foodMarket; }
       if (relative) { userData.movements.relative = relative; }
       if (familyDoctor) { userData.movements.familyDoctor = familyDoctor; }
-    }
+    }*/
 
     this.storageService.set('user', userData).then(() => this.successToast()).catch(() => this.unsuccessToast());
   }

@@ -18,7 +18,6 @@ export class StorageService {
 
   public async get(key: string){
     const data =  await this.storage.get(key);
-    console.log(data);
     return data;
   }
 

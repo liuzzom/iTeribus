@@ -9,7 +9,11 @@
     - Dialog per Rimozione Spostamento
 
 - Funzionalità:
-    - Visualizza/Modifica Utente
+    - Visualizza/Modifica Utent
+        - Tipizzare concetto di Utente
+        - Memorizzare Regioni Residenza/Domicilio
+        - Inizializzare form basandoci su risultato della get
+        - Vedere inizializzazione delle select
         - Modalità basata su link di arrivo (2 link in Home Page)
         - Passaggio da Visualizza a Modifica su click bottone (da dentro)
     - Su tutte le pagine
