@@ -15,6 +15,10 @@ const routes: Routes = [
     path: 'user-info-form',
     loadChildren: () => import('./user-info-form/user-info-form.module').then(m => m.UserInfoFormPageModule)
   },
+  {
+    path: 'user-info',
+    loadChildren: () => import('./user-info/user-info.module').then( m => m.UserInfoPageModule)
+  },
 ];
 
 @NgModule({
