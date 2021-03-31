@@ -6,6 +6,8 @@ import { Region } from '../../domain-model/Region';
 import { Province } from '../../domain-model/Province';
 import { Municipality } from '../../domain-model/Municipality';
 import { DatePipe } from '@angular/common';
+import { ToastController } from '@ionic/angular';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-user-info-form',
@@ -38,7 +40,9 @@ export class UserInfoFormPage implements OnInit {
     private datePipe: DatePipe,
     private formBuilder: FormBuilder,
     private geoService: GeoService,
-    private storageService: StorageService
+    private router: Router,
+    private storageService: StorageService,
+    public toastController: ToastController
   ) { }
 
   ngOnInit() {
@@ -88,7 +92,8 @@ export class UserInfoFormPage implements OnInit {
     });
   }
 
-  toggleCheckbox() {
+
+  toggleDomicileCheckbox() {
     this.domicileChecked = !this.domicileChecked;
 
     if (this.domicileChecked) {
@@ -110,6 +115,7 @@ export class UserInfoFormPage implements OnInit {
   }
 
 
+  // ----- Getter and Setter for Residence/Domicile FormGroup ----- \\
   getGeographicalControl(key: string): AbstractControl {
     return this.residenceDomicileFormGroup.get(key);
   }
@@ -117,7 +123,6 @@ export class UserInfoFormPage implements OnInit {
   setGeographicalControl(key: string, value: string): void {
     this.residenceDomicileFormGroup.get(key).setValue(value);
   }
-
 
 
   // ----- Geographical Filtering for Select -----
@@ -241,9 +246,52 @@ export class UserInfoFormPage implements OnInit {
       if (familyDoctor) { userData.movements.familyDoctor = familyDoctor; }
     }
 
-    this.storageService.set('user', userData);
-
-    
-
+    this.storageService.set('user', userData).then(() => this.successToast()).catch(() => this.unsuccessToast());
   }
+
+  async successToast() {
+    const toast = await this.toastController.create({
+      message: 'Dati salvati correttamente.',
+      color: 'success',
+      duration: 2000
+    });
+    toast.present();
+
+    this.router.navigate(['/home']);
+  }
+
+  async unsuccessToast() {
+    const toast = await this.toastController.create({
+      color: 'danger',
+      message: 'Errore: impossibile salvare i dati.',
+      duration: 2000
+    });
+    toast.present();
+    this.router.navigate(['/user-info-form']);
+  }
+
+ /*  async presentToastWithOptions() {
+    const toast = await this.toastController.create({
+      header: 'Toast header',
+      message: 'Click to Close',
+      position: 'top',
+      buttons: [
+        {
+          side: 'start',
+          icon: 'star',
+          text: 'Favorite',
+          handler: () => {
+            console.log('Favorite clicked');
+          }
+        }, {
+          text: 'Done',
+          role: 'cancel',
+          handler: () => {
+            console.log('Cancel clicked');
+          }
+        }
+      ]
+    });
+    toast.present();
+  } */
 }
