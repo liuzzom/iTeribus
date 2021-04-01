@@ -10,10 +10,8 @@
 
 - Funzionalità:
     - Visualizza/Modifica Utent
-        - Tipizzare concetto di Utente
-        - Memorizzare Regioni Residenza/Domicilio
-        - Inizializzare form basandoci su risultato della get
-        - Vedere inizializzazione delle select
+        - Tasto modifica in cima (da vedere in caso di view mode)
+        - Tasto annulla a fianco salva 
         - Modalità basata su link di arrivo (2 link in Home Page)
         - Passaggio da Visualizza a Modifica su click bottone (da dentro)
     - Su tutte le pagine

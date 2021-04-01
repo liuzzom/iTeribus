@@ -16,23 +16,23 @@
           <ion-item-group>
             <ion-item>
               <ion-label position="floating">Nome</ion-label>
-              <ion-input formControlName="name"></ion-input>
+              <ion-input [readonly]="!editMode" formControlName="name"></ion-input>
             </ion-item>
             <ion-item>
               <ion-label position="floating">Cognome</ion-label>
-              <ion-input formControlName="surname"></ion-input>
+              <ion-input [readonly]="!editMode" formControlName="surname"></ion-input>
             </ion-item>
             <ion-item>
               <ion-label position="floating">Data di nascita</ion-label>
-              <ion-datetime formControlName="dateOfBirth" displayFormat="DD MM YYYY"></ion-datetime>
+              <ion-datetime [readonly]="!editMode" formControlName="dateOfBirth" displayFormat="DD MM YYYY"></ion-datetime>
             </ion-item>
             <ion-item>
               <ion-label position="floating">Telefono</ion-label>
-              <ion-input formControlName="phoneNumber" inputmode="tel"></ion-input>
+              <ion-input [readonly]="!editMode" formControlName="phoneNumber" inputmode="tel"></ion-input>
             </ion-item>
             <ion-item>
               <ion-label position="floating">Email</ion-label>
-              <ion-input formControlName="email" inputmode="email"></ion-input>
+              <ion-input [readonly]="!editMode" formControlName="email" inputmode="email"></ion-input>
             </ion-item>
           </ion-item-group>
         </form>
@@ -43,7 +43,8 @@
           <ion-item-group>
             <ion-item>
               <ion-label position="floating">Tipo</ion-label>
-              <ion-select interface="action-sheet" formControlName="type">
+              <!-- TODO: !editMode da tenere d'occhio nel caso crei dei problemi -->
+              <ion-select [disabled]="!editMode"  interface="action-sheet" formControlName="type">
                 <ion-select-option value="cartaIdentità">Carta d'Identità</ion-select-option>
                 <ion-select-option value="patenteDiGuida">Patente di Guida</ion-select-option>
                 <ion-select-option value="passaporto">Passaporto</ion-select-option>
@@ -51,15 +52,15 @@
             </ion-item>
             <ion-item>
               <ion-label position="floating">Numero</ion-label>
-              <ion-input formControlName="number"></ion-input>
+              <ion-input [readonly]="!editMode" formControlName="number"></ion-input>
             </ion-item>
             <ion-item>
               <ion-label position="floating">Rilasciato da</ion-label>
-              <ion-input formControlName="issuingAuthority"></ion-input>
+              <ion-input [readonly]="!editMode" formControlName="issuingAuthority"></ion-input>
             </ion-item>
             <ion-item>
               <ion-label position="floating">Data di Rilascio</ion-label>
-              <ion-datetime formControlName="issueDate" displayFormat="DD MM YYYY"></ion-datetime>
+              <ion-datetime [readonly]="!editMode" formControlName="issueDate" displayFormat="DD MM YYYY"></ion-datetime>
             </ion-item>
           </ion-item-group>
         </form>
@@ -74,19 +75,22 @@
             </ion-item-divider>
             <ion-item>
               <ion-label position="stacked">Regione</ion-label>
-              <ion-select [formControl]="residenceDomicileFormGroup.controls['residenceRegion']" interface="action-sheet"
+              <!-- TODO: !editMode da tenere d'occhio nel caso crei dei problemi -->
+              <ion-select [disabled]="!editMode" [formControl]="residenceDomicileFormGroup.controls['residenceRegion']" interface="action-sheet"
                           (ionFocus)="clearProvMunFields('residence')" (ionChange)="getProvince('residence')">
                 <ion-select-option *ngFor="let region of regions" value="{{region.id_regione}}">{{region.regione}}</ion-select-option>
               </ion-select>
             </ion-item>
-            <ion-item [disabled]="!getGeographicalControl('residenceRegion').valid">
+            <!-- TODO: !editMode da tenere d'occhio nel caso crei dei problemi -->
+            <ion-item [disabled]="!editMode || !getGeographicalControl('residenceRegion').valid">
               <ion-label position="stacked">Provincia</ion-label>
               <ion-select [formControl]="residenceDomicileFormGroup.controls['residenceProvince']" interface="action-sheet"
                           (ionFocus)="clearMunFields('residence')" (ionChange)="getMunicipalities('residence')">
                 <ion-select-option *ngFor="let province of residenceProvinces" value="{{province.sigla}}">{{province.provincia}}</ion-select-option>
               </ion-select>
             </ion-item>
-            <ion-item [disabled]="!getGeographicalControl('residenceProvince').valid">
+            <!-- TODO: !editMode da tenere d'occhio nel caso crei dei problemi -->
+            <ion-item [disabled]="!editMode || !getGeographicalControl('residenceProvince').valid">
               <ion-label position="stacked">Città</ion-label>
               <ion-select [formControl]="residenceDomicileFormGroup.controls['residenceMunicipality']" interface="action-sheet">
                 <ion-select-option *ngFor="let municipality of residenceMunicipalities" value="{{municipality.comune}}">{{municipality.comune}}</ion-select-option>
@@ -111,20 +115,23 @@
               <ion-label>Domicilio/Dimora</ion-label>
             </ion-item-divider>
             <ion-item>
+              <!-- TODO: !editMode da tenere d'occhio nel caso crei dei problemi -->
               <ion-label position="stacked">Regione</ion-label>
-              <ion-select [formControl]="residenceDomicileFormGroup.controls['domicileRegion']" interface="action-sheet"
+              <ion-select [disabled]="!editMode"  [formControl]="residenceDomicileFormGroup.controls['domicileRegion']" interface="action-sheet"
                           (ionFocus)="clearProvMunFields('domicile')" (ionChange)="getProvince('domicile')">
                 <ion-select-option *ngFor="let region of regions" value="{{region.id_regione}}">{{region.regione}}</ion-select-option>
               </ion-select>
             </ion-item>
-            <ion-item [disabled]="!getGeographicalControl('domicileRegion').valid">
+            <!-- TODO: !editMode da tenere d'occhio nel caso crei dei problemi -->
+            <ion-item [disabled]="!editMode || !getGeographicalControl('domicileRegion').valid">
               <ion-label position="stacked">Provincia</ion-label>
               <ion-select [formControl]="residenceDomicileFormGroup.controls['domicileProvince']" interface="action-sheet"
                           (ionFocus)="clearMunFields('domicile')" (ionChange)="getMunicipalities('domicile')">
                 <ion-select-option *ngFor="let province of domicileProvinces" value="{{province.sigla}}">{{province.provincia}}</ion-select-option>
               </ion-select>
             </ion-item>
-            <ion-item [disabled]="!getGeographicalControl('domicileProvince').valid">
+            <!-- TODO: !editMode da tenere d'occhio nel caso crei dei problemi -->
+            <ion-item [disabled]="!editMode || !getGeographicalControl('domicileProvince').valid">
               <ion-label position="stacked">Città</ion-label>
               <ion-select [formControl]="residenceDomicileFormGroup.controls['domicileMunicipality']" interface="action-sheet">
                 <ion-select-option *ngFor="let municipality of domicileMunicipalities" value="{{municipality.comune}}">{{municipality.comune}}</ion-select-option>
@@ -137,7 +144,8 @@
           </ion-item-group>
         </form>
 
-        <ion-button (click)="addUserInfo()">
+        <!-- TODO: editMode da tenere d'occhio nel caso crei dei problemi -->
+        <ion-button *ngIf="editMode" (click)="addUserInfo()">
           <span class="button-text">SALVA</span>
           <ion-icon name="save"></ion-icon>
         </ion-button>

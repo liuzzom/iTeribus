@@ -25,6 +25,9 @@ export class UserInfoPage implements OnInit{
   private readonly addressPattern = '^[A-Za-z][a-zàèéìòù]* ([A-Z-a-zàèéìòù]+\\.?)*\\ ?([A-Za-z][a-zàèéìòù]*)? ?([A-Za-zàèéìòù]*)+ (\\d+(\\/?[A-Z[a-z]+)?)';
   private user: User;
 
+  // false: view mode, true: edit mode
+  editMode: boolean = true;
+
   anagraphicFormGroup: FormGroup;
   documentFormGroup: FormGroup;
   residenceDomicileFormGroup: FormGroup;
@@ -194,7 +197,7 @@ export class UserInfoPage implements OnInit{
     this.residenceDomicileFormGroup.get(key).setValue(value);
   }
 
-  
+
   // ----- Geographical Filtering for Select -----
 
   getProvinceObservable(mode: string): Observable<Province[]> {
