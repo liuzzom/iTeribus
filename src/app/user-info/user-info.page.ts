@@ -10,6 +10,11 @@ import { DatePipe } from '@angular/common';
 import { ToastController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import {delay} from "rxjs/operators";
+import {Observable} from "rxjs";
+import {logger} from "codelyzer/util/logger";
+import {Document} from "../../domain-model/Document";
+import {Place} from "../../domain-model/Place";
+import {Movement} from "../../domain-model/Movement";
 
 @Component({
   selector: 'app-user-info',
@@ -50,13 +55,13 @@ export class UserInfoPage implements OnInit{
 
 
   async ngOnInit() {
-    this.domicileChecked = false;
-
     // Init Form
     this.initForm();
 
     // Initialize user
     this.user = await this.storageService.get('user');
+    console.log(this.user.residence);
+    console.log(this.user.domicile);
 
     // Get Regions
     this.geoService.getRegions().subscribe(  regions => {
@@ -66,6 +71,7 @@ export class UserInfoPage implements OnInit{
 
   }
 
+  // Initialize the User Form
   private initForm(){
     // ----- Anagraphic Validators ----- \\
     this.anagraphicFormGroup = this.formBuilder.group({
@@ -97,35 +103,67 @@ export class UserInfoPage implements OnInit{
     });
   }
 
+  // Get Data from Storage and Fill the User Form
   private fillForm(){
+    // Anagraphical Section \\
     this.anagraphicFormGroup.get('name').setValue(this.user.name);
     this.anagraphicFormGroup.get('surname').setValue(this.user.surname);
     this.anagraphicFormGroup.get('dateOfBirth').setValue(this.user.dateOfBirth);
     this.anagraphicFormGroup.get('phoneNumber').setValue(this.user.phoneNumber);
     this.anagraphicFormGroup.get('email').setValue(this.user.email);
 
+    // Document Section \\
     this.documentFormGroup.get('type').setValue(this.user.document.type);
     this.documentFormGroup.get('number').setValue(this.user.document.number);
     this.documentFormGroup.get('issuingAuthority').setValue(this.user.document.issuingAuthority);
     this.documentFormGroup.get('issueDate').setValue(this.user.document.issueDate);
 
+    // Residence Section \\
     this.residenceDomicileFormGroup.get('residenceRegion').setValue(this.user.residence.region);
-    // TODO: getProvinces
-    this.residenceDomicileFormGroup.get('residenceProvince').setValue(this.user.residence.province);
-    // TODO: getMunicipality
-    this.residenceDomicileFormGroup.get('residenceMunicipality').setValue(this.user.residence.municipality);
+    this.getProvinceObservable('residence').subscribe(provinces => {
+      // Filter is used to avoid performance drops
+      this.residenceProvinces = provinces.
+        filter(province => province.id_regione === this.getGeographicalControl('residenceRegion').value);
+      this.residenceDomicileFormGroup.get('residenceProvince').setValue(this.user.residence.province);
+
+      this.getMunicipalitiesObservable('residence').subscribe((municipalities) => {
+        this.residenceMunicipalities = municipalities.
+          filter(municipality => municipality.provincia === this.getGeographicalControl('residenceProvince').value);
+        this.residenceDomicileFormGroup.get('residenceMunicipality').setValue(this.user.residence.municipality);
+      });
+    });
     this.residenceDomicileFormGroup.get('residenceAddress').setValue(this.user.residence.address);
 
-    this.residenceDomicileFormGroup.get('domicileRegion').setValue(this.user.domicile.region);
-    // TODO: getProvinces
-    this.residenceDomicileFormGroup.get('domicileProvince').setValue(this.user.domicile.province);
-    // TODO: getMunicipality
-    this.residenceDomicileFormGroup.get('domicileMunicipality').setValue(this.user.domicile.municipality);
-    this.residenceDomicileFormGroup.get('domicileAddress').setValue(this.user.domicile.address);
+    // Initialize domicile checkbox to false
+    this.domicileChecked = false;
+
+    // When Domicile is different to Residence
+    if(JSON.stringify(this.user.domicile) !== JSON.stringify(this.user.residence)){
+      console.log('domicilio da impostare');
+
+      // domicile checkbox to true
+      document.getElementById('domicileCheckbox').setAttribute('checked', 'true');
+
+      // Domicile Section \\
+      this.residenceDomicileFormGroup.get('domicileRegion').setValue(this.user.domicile.region);
+      this.getProvinceObservable('domicile').subscribe(provinces => {
+        // Filter is used to avoid performance drop
+        this.domicileProvinces = provinces.
+          filter(province => province.id_regione === this.getGeographicalControl('domicileRegion').value);
+        this.residenceDomicileFormGroup.get('domicileProvince').setValue(this.user.domicile.province);
+
+        this.getMunicipalitiesObservable('domicile').subscribe(municipalities => {
+          this.domicileMunicipalities = municipalities.filter(municipality => municipality.provincia === this.getGeographicalControl('domicileProvince').value);
+          this.residenceDomicileFormGroup.get('domicileMunicipality').setValue(this.user.domicile.municipality);
+        })
+      });
+      this.residenceDomicileFormGroup.get('domicileAddress').setValue(this.user.domicile.address);
+    }
   }
 
-
+  // Handle changes in domicile checkbox
   toggleDomicileCheckbox() {
+    console.log('toggle');
     this.domicileChecked = !this.domicileChecked;
 
     if (this.domicileChecked) {
@@ -156,8 +194,21 @@ export class UserInfoPage implements OnInit{
     this.residenceDomicileFormGroup.get(key).setValue(value);
   }
 
-
+  
   // ----- Geographical Filtering for Select -----
+
+  getProvinceObservable(mode: string): Observable<Province[]> {
+    if (mode === 'residence') {
+      this.residenceProvinces = [];
+      return this.geoService.getProvinces();
+    } else if (mode === 'domicile') {
+      this.domicileProvinces = [];
+      return this.geoService.getProvinces();
+    } else {
+      console.error('no supported mode');
+      return null;
+    }
+  }
 
   getProvince(mode: string) {
     if (mode === 'residence') {
@@ -176,6 +227,19 @@ export class UserInfoPage implements OnInit{
     }
   }
 
+  getMunicipalitiesObservable(mode: string): Observable<Municipality[]> {
+    if (mode === 'residence') {
+      this.residenceMunicipalities = [];
+      return this.geoService.getMunicipalities();
+    } else if (mode === 'domicile') {
+      this.domicileMunicipalities = [];
+      return this.geoService.getMunicipalities();
+    } else {
+      console.error('no supported mode');
+      return null;
+    }
+  }
+  
   getMunicipalities(mode: string) {
     if (mode === 'residence') {
       this.residenceMunicipalities = [];
@@ -219,35 +283,35 @@ export class UserInfoPage implements OnInit{
     return str.split(' ').map(str => str.charAt(0).toUpperCase() + str.slice(1)).join(' ');
   }
 
+  // TODO: Test
   addUserInfo() {
-
     const name = this.capitalize(this.anagraphicFormGroup.get('name').value);
     const surname = this.capitalize(this.anagraphicFormGroup.get('surname').value);
 
-    let userData: any = {
-      anagraphic: {
-        name: name,
-        surname: surname,
-        dateOfBirth: this.datePipe.transform(this.anagraphicFormGroup.get('dateOfBirth').value, 'dd-MM-YYYY'),
-        phoneNumber: this.anagraphicFormGroup.get('phoneNumber').value.replaceAll(' ', ''),
-        email: this.anagraphicFormGroup.get('email').value
-      },
-      document: {
-        type: this.documentFormGroup.get('type').value,
-        number: this.documentFormGroup.get('number').value.replaceAll(' ', '').toUpperCase(),
-        issuingAuthority: this.documentFormGroup.get('issuingAuthority').value,
-        issueDate: this.datePipe.transform(this.documentFormGroup.get('issueDate').value, 'dd-MM-YYYY')
-      },
-      residence: {
-        province: this.residenceDomicileFormGroup.get('residenceProvince').value,
-        municipality: this.residenceDomicileFormGroup.get('residenceMunicipality').value,
-        address: this.residenceDomicileFormGroup.get('residenceAddress').value
-      },
-      domicile: {
-        province: this.residenceDomicileFormGroup.get('residenceProvince').value,
-        municipality: this.residenceDomicileFormGroup.get('residenceMunicipality').value,
-        address: this.residenceDomicileFormGroup.get('residenceAddress').value
-      },
+    let userData: User = {
+      name: name,
+      surname: surname,
+      dateOfBirth: this.anagraphicFormGroup.get('dateOfBirth').value,
+      phoneNumber: this.anagraphicFormGroup.get('phoneNumber').value.replaceAll(' ', ''),
+      email: this.anagraphicFormGroup.get('email').value,
+      document: new Document(
+        this.documentFormGroup.get('type').value,
+        this.documentFormGroup.get('number').value.replaceAll(' ', '').toUpperCase(),
+        this.documentFormGroup.get('issuingAuthority').value,
+        this.documentFormGroup.get('issueDate').value,
+      ),
+      residence: new Place(
+        this.residenceDomicileFormGroup.get('residenceRegion').value,
+        this.residenceDomicileFormGroup.get('residenceProvince').value,
+        this.residenceDomicileFormGroup.get('residenceMunicipality').value,
+        this.residenceDomicileFormGroup.get('residenceAddress').value
+      ),
+      domicile: new Place(
+        this.residenceDomicileFormGroup.get('residenceRegion').value,
+        this.residenceDomicileFormGroup.get('residenceProvince').value,
+        this.residenceDomicileFormGroup.get('residenceMunicipality').value,
+        this.residenceDomicileFormGroup.get('residenceAddress').value
+      ),
     };
 
     if (this.residenceDomicileFormGroup.get('domicileRegion').value &&
@@ -256,27 +320,12 @@ export class UserInfoPage implements OnInit{
       this.residenceDomicileFormGroup.get('domicileAddress').value) {
 
       userData.domicile = {
+        region: this.residenceDomicileFormGroup.get('residenceRegion').value,
         province: this.residenceDomicileFormGroup.get('domicileProvince').value,
         municipality: this.residenceDomicileFormGroup.get('domicileMunicipality').value,
         address: this.residenceDomicileFormGroup.get('domicileAddress').value
       };
     }
-
-    /*const work = this.initialMovementsFormGroup.get('work').value;
-    const school = this.initialMovementsFormGroup.get('school').value;
-    const foodMarket = this.initialMovementsFormGroup.get('foodMarket').value;
-    const relative = this.initialMovementsFormGroup.get('relative').value;
-    const familyDoctor = this.initialMovementsFormGroup.get('familyDoctor').value;
-
-    if (work || school || foodMarket || relative || familyDoctor) {
-      userData.movements = {};
-
-      if (work) { userData.movements.work = work; }
-      if (school) { userData.movements.school = school; }
-      if (foodMarket) { userData.movements.foodMarket = foodMarket; }
-      if (relative) { userData.movements.relative = relative; }
-      if (familyDoctor) { userData.movements.familyDoctor = familyDoctor; }
-    }*/
 
     this.storageService.set('user', userData).then(() => this.successToast()).catch(() => this.unsuccessToast());
   }

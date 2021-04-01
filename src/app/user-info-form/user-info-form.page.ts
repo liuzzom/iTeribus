@@ -56,9 +56,9 @@ export class UserInfoFormPage implements OnInit {
     this.anagraphicFormGroup = this.formBuilder.group({
       name: new FormControl('Antonino Mauro', [Validators.required, Validators.pattern('^[A-Z][a-z]*(\ ([A-Z][a-z]*)?)*')]),
       surname: new FormControl('Liuzzo', [Validators.required, Validators.pattern('^[A-Z][a-z]*(\ ([A-Z][a-z]*)?)*')]),
-      dateOfBirth: new FormControl(new Date().toISOString(), [Validators.required]),
+      dateOfBirth: new FormControl('1996-12-02', [Validators.required]),
       phoneNumber: new FormControl('3489534151', [Validators.required, Validators.pattern('^\\+?[0-9\ ]*')]),
-      email: new FormControl('', Validators.email)
+      email: new FormControl('mauro.liuzzo@gmail.com', Validators.email)
     });
 
     // ----- Document Validators ----- \\
@@ -66,7 +66,7 @@ export class UserInfoFormPage implements OnInit {
       type: new FormControl('cartaIdentità', [Validators.required]),
       number: new FormControl('AX2557411', [Validators.required, Validators.pattern('^[a-zA-Z0-9]*$')]),
       issuingAuthority: new FormControl('Comune di Campofranco', [Validators.required]),
-      issueDate: new FormControl(new Date().toISOString(), [Validators.required])
+      issueDate: new FormControl('2016-10-03', [Validators.required])
     });
 
     // ----- Residence and Domicile Validators ----- \\
@@ -74,7 +74,7 @@ export class UserInfoFormPage implements OnInit {
       residenceRegion: new FormControl('', [Validators.required]),
       residenceProvince: new FormControl('', [Validators.required]),
       residenceMunicipality: new FormControl('', [Validators.required]),
-      residenceAddress: new FormControl('', [Validators.required, Validators.pattern(this.addressPattern)]),
+      residenceAddress: new FormControl('Via Carducci 21', [Validators.required, Validators.pattern(this.addressPattern)]),
       domicileRegion: new FormControl('', []),
       domicileProvince: new FormControl('', []),
       domicileMunicipality: new FormControl('', []),
@@ -228,7 +228,7 @@ export class UserInfoFormPage implements OnInit {
       this.residenceDomicileFormGroup.get('domicileAddress').value) {
 
       userData.domicile = {
-        region: this.residenceDomicileFormGroup.get('residenceRegion').value,
+        region: this.residenceDomicileFormGroup.get('domicileRegion').value,
         province: this.residenceDomicileFormGroup.get('domicileProvince').value,
         municipality: this.residenceDomicileFormGroup.get('domicileMunicipality').value,
         address: this.residenceDomicileFormGroup.get('domicileAddress').value
