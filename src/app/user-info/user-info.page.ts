@@ -9,16 +9,16 @@ import { Municipality } from '../../domain-model/Municipality';
 import { DatePipe } from '@angular/common';
 import { ToastController } from '@ionic/angular';
 import { Router } from '@angular/router';
-import {Observable} from "rxjs";
-import {Document} from "../../domain-model/Document";
-import {Place} from "../../domain-model/Place";
+import { Observable } from "rxjs";
+import { Document } from "../../domain-model/Document";
+import { Place } from "../../domain-model/Place";
 
 @Component({
   selector: 'app-user-info',
   templateUrl: './user-info.page.html',
   styleUrls: ['./user-info.page.scss'],
 })
-export class UserInfoPage implements OnInit{
+export class UserInfoPage implements OnInit {
   private readonly addressPattern = '^[A-Za-z][a-zàèéìòù]* ([A-Z-a-zàèéìòù]+\\.?)*\\ ?([A-Za-z][a-zàèéìòù]*)? ?([A-Za-zàèéìòù]*)+ (\\d+(\\/?[A-Z[a-z]+)?)';
   private user: User;
 
@@ -63,8 +63,12 @@ export class UserInfoPage implements OnInit{
     // Get User data from Storage
     this.user = await this.storageService.get('user');
 
+    if (!this.user) {
+      this.router.navigate(['./user-info-form']);
+    }
+
     // Get Regions
-    this.geoService.getRegions().subscribe(  regions => {
+    this.geoService.getRegions().subscribe(regions => {
       this.regions = regions;
       this.fillForm();
     });
@@ -72,7 +76,7 @@ export class UserInfoPage implements OnInit{
   }
 
   // Initialize the User Form
-  private initForm(){
+  private initForm() {
     // ----- Anagraphic Validators ----- \\
     this.anagraphicFormGroup = this.formBuilder.group({
       name: new FormControl('', [Validators.required, Validators.pattern('^[A-Z][a-z]*(\ ([A-Z][a-z]*)?)*')]),
@@ -104,7 +108,7 @@ export class UserInfoPage implements OnInit{
   }
 
   // Get Data from Storage and Fill the User Form
-  private fillForm(){
+  private fillForm() {
     // Anagraphical Section \\
     this.anagraphicFormGroup.get('name').setValue(this.user.name);
     this.anagraphicFormGroup.get('surname').setValue(this.user.surname);
@@ -138,7 +142,7 @@ export class UserInfoPage implements OnInit{
     this.domicileChecked = false;
 
     // When Domicile is different to Residence
-    if(JSON.stringify(this.user.domicile) !== JSON.stringify(this.user.residence)){
+    if (JSON.stringify(this.user.domicile) !== JSON.stringify(this.user.residence)) {
 
       // domicile checkbox to true
       document.getElementById('domicileCheckbox').setAttribute('checked', 'true');
@@ -163,11 +167,11 @@ export class UserInfoPage implements OnInit{
   // ----- Handler Section ----- \\
 
 
-  toggleEditMode(){
+  toggleEditMode() {
     this.editMode = !this.editMode;
   }
 
-  undo(){
+  undo() {
     this.fillForm();
     this.toggleEditMode();
   }
@@ -247,7 +251,7 @@ export class UserInfoPage implements OnInit{
       return null;
     }
   }
-  
+
   getMunicipalities(mode: string) {
     if (mode === 'residence') {
       this.residenceMunicipalities = [];

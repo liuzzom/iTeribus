@@ -49,7 +49,7 @@ export class UserInfoFormPage implements OnInit {
     public toastController: ToastController
   ) { }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.domicileChecked = false;
 
     // ----- Anagraphic Validators ----- \\
@@ -94,6 +94,12 @@ export class UserInfoFormPage implements OnInit {
     this.geoService.getRegions().subscribe(regions => {
       this.regions = regions;
     });
+
+    const user = await this.storageService.get('user');
+
+    if (user){
+      this.router.navigate(['./home']);
+    }
   }
 
 
