@@ -9,11 +9,11 @@
     - Dialog per Rimozione Spostamento
 
 - Funzionalità:
+    - Schermata Registrazione:
+        - Cambiare il bottone in Fab visibile solo nel quarto step
+        - Redirect Forzato per utenti stronzi
     - Visualizza/Modifica Utent
-        - Tasto modifica in cima (da vedere in caso di view mode)
-        - Tasto annulla a fianco salva 
         - Modalità basata su link di arrivo (2 link in Home Page)
-        - Passaggio da Visualizza a Modifica su click bottone (da dentro)
     - Su tutte le pagine
         - Redirect su form inserimento se non ci sono i dati dell'utente
     - Vedere come implementare lo splash screen

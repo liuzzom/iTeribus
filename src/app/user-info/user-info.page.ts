@@ -1,6 +1,6 @@
-import { User } from './../../domain-model/User';
-import { StorageService } from './../services/storage.service';
-import {Component, OnInit, OnChanges, SimpleChanges, SimpleChange} from '@angular/core';
+import { User } from '../../domain-model/User';
+import { StorageService } from '../services/storage.service';
+import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { GeoService } from '../services/geo.service';
 import { Region } from '../../domain-model/Region';
@@ -9,12 +9,9 @@ import { Municipality } from '../../domain-model/Municipality';
 import { DatePipe } from '@angular/common';
 import { ToastController } from '@ionic/angular';
 import { Router } from '@angular/router';
-import {delay} from "rxjs/operators";
 import {Observable} from "rxjs";
-import {logger} from "codelyzer/util/logger";
 import {Document} from "../../domain-model/Document";
 import {Place} from "../../domain-model/Place";
-import {Movement} from "../../domain-model/Movement";
 
 @Component({
   selector: 'app-user-info',
@@ -26,7 +23,7 @@ export class UserInfoPage implements OnInit{
   private user: User;
 
   // false: view mode, true: edit mode
-  editMode: boolean = true;
+  editMode: boolean = false;
 
   anagraphicFormGroup: FormGroup;
   documentFormGroup: FormGroup;
@@ -57,14 +54,14 @@ export class UserInfoPage implements OnInit{
   ) { }
 
 
+  // ----- Initialization Section ----- \\
+
   async ngOnInit() {
     // Init Form
     this.initForm();
 
-    // Initialize user
+    // Get User data from Storage
     this.user = await this.storageService.get('user');
-    console.log(this.user.residence);
-    console.log(this.user.domicile);
 
     // Get Regions
     this.geoService.getRegions().subscribe(  regions => {
@@ -142,7 +139,6 @@ export class UserInfoPage implements OnInit{
 
     // When Domicile is different to Residence
     if(JSON.stringify(this.user.domicile) !== JSON.stringify(this.user.residence)){
-      console.log('domicilio da impostare');
 
       // domicile checkbox to true
       document.getElementById('domicileCheckbox').setAttribute('checked', 'true');
@@ -164,9 +160,20 @@ export class UserInfoPage implements OnInit{
     }
   }
 
+  // ----- Handler Section ----- \\
+
+
+  toggleEditMode(){
+    this.editMode = !this.editMode;
+  }
+
+  undo(){
+    this.fillForm();
+    this.toggleEditMode();
+  }
+
   // Handle changes in domicile checkbox
   toggleDomicileCheckbox() {
-    console.log('toggle');
     this.domicileChecked = !this.domicileChecked;
 
     if (this.domicileChecked) {
@@ -187,7 +194,6 @@ export class UserInfoPage implements OnInit{
     this.residenceDomicileFormGroup.updateValueAndValidity();
   }
 
-
   // ----- Getter and Setter for Residence/Domicile FormGroup ----- \\
   getGeographicalControl(key: string): AbstractControl {
     return this.residenceDomicileFormGroup.get(key);
@@ -196,7 +202,6 @@ export class UserInfoPage implements OnInit{
   setGeographicalControl(key: string, value: string): void {
     this.residenceDomicileFormGroup.get(key).setValue(value);
   }
-
 
   // ----- Geographical Filtering for Select -----
 
@@ -286,8 +291,9 @@ export class UserInfoPage implements OnInit{
     return str.split(' ').map(str => str.charAt(0).toUpperCase() + str.slice(1)).join(' ');
   }
 
-  // TODO: Test
-  addUserInfo() {
+  // ----- Storage Section ----- \\
+
+  editUserInfo() {
     const name = this.capitalize(this.anagraphicFormGroup.get('name').value);
     const surname = this.capitalize(this.anagraphicFormGroup.get('surname').value);
 
@@ -332,6 +338,8 @@ export class UserInfoPage implements OnInit{
 
     this.storageService.set('user', userData).then(() => this.successToast()).catch(() => this.unsuccessToast());
   }
+
+  // ----- Feedback Section ----- \\
 
   async successToast() {
     const toast = await this.toastController.create({
