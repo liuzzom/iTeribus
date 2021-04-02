@@ -41,7 +41,6 @@ export class UserInfoFormPage implements OnInit {
 
 
   constructor(
-    private datePipe: DatePipe,
     private formBuilder: FormBuilder,
     private geoService: GeoService,
     private router: Router,

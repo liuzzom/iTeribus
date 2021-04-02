@@ -5,8 +5,13 @@ import { UserInfoPage } from './user-info.page';
 
 const routes: Routes = [
   {
-    path: '',
+    path: ':mode',
     component: UserInfoPage
+  },
+  {
+    path: '',
+    redirectTo: '/user-info/view',
+    pathMatch: 'full'
   }
 ];
 
@@ -14,4 +19,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class UserInfoPageRoutingModule {}
+export class UserInfoPageRoutingModule { }

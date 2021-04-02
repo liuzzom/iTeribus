@@ -8,7 +8,7 @@ import { Province } from '../../domain-model/Province';
 import { Municipality } from '../../domain-model/Municipality';
 import { DatePipe } from '@angular/common';
 import { ToastController } from '@ionic/angular';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { Observable } from "rxjs";
 import { Document } from "../../domain-model/Document";
 import { Place } from "../../domain-model/Place";
@@ -45,7 +45,7 @@ export class UserInfoPage implements OnInit {
 
 
   constructor(
-    private datePipe: DatePipe,
+    private activatedRoute: ActivatedRoute,
     private formBuilder: FormBuilder,
     private geoService: GeoService,
     private router: Router,
@@ -66,6 +66,8 @@ export class UserInfoPage implements OnInit {
     if (!this.user) {
       this.router.navigate(['./user-info-form']);
     }
+
+    this.editMode = this.activatedRoute.snapshot.paramMap.get('mode') === 'edit' ? true : false;
 
     // Get Regions
     this.geoService.getRegions().subscribe(regions => {
