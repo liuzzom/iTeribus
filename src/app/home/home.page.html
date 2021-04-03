@@ -64,7 +64,6 @@
                     <span>Impostazioni</span>
                   </mat-panel-title>
                 </mat-expansion-panel-header>
-
                 <ion-item>
                   <ion-checkbox id="checkbox-{{i}}"  color="primary" slot="start"></ion-checkbox><!--TODO: checked bindato con repeat-->
                   <span style="margin-right: 1em"></span>
@@ -83,11 +82,6 @@
                         <ion-select-option value="6">Sabato</ion-select-option>
                         <ion-select-option value="7">Domenica</ion-select-option>
                       </ion-select>
-                      <!-- <ion-label position="floating">Genera ogni:</ion-label>
-                      <ion-select interface="action-sheet">
-                        <ion-select-option>Giorno</ion-select-option>
-                        <ion-select-option>Settimana</ion-select-option>
-                      </ion-select> -->
                     </ion-item>
                     <ion-item>
                       <ion-label position="floating">alle:</ion-label>
@@ -98,6 +92,7 @@
 
               </mat-expansion-panel>
             </mat-accordion>
+            <!-- Buttons Container -->
             <div class="card-buttons-container">
               <ion-fab-button size="small">
                 <ion-icon name="eye-outline"></ion-icon>
@@ -105,7 +100,8 @@
               <ion-fab-button size="small" color="secondary">
                 <ion-icon name="document-text-outline"></ion-icon>
               </ion-fab-button>
-              <ion-fab-button size="small" color="danger">
+              <!-- Delete Button -->
+              <ion-fab-button size="small" color="danger" (click)="showAlert(i)">
                 <ion-icon name="trash-outline"></ion-icon>
               </ion-fab-button>
             </div>
@@ -113,14 +109,5 @@
         </ion-card>
       </ion-item>
     </ion-list>
-
-    <!-- <div>
-      <p>
-        <a href="./user-info-form">Creazione Profilo Utente</a>
-      </p>
-      <p>
-        <a href="./user-info">Modifica e Riepilogo Profili utente</a>
-      </p>
-    </div> -->
   </ion-content>
 </div>

@@ -11,8 +11,14 @@
 
 - Funzionalità:
     - Home Page
-        - Get per gli spostamenti (vedere get con più chiavi)
         - Vedere se Ionic fornisce qualcosa per gli eventi temporizzati
+        - Inizializzare form interni a card degli spostamenti per ripetizioni
+
+    - Spostamenti
+        - visualiazzione con read only
+        - modifica spostamento
+        - cancellazione spostamento
     - Su tutte le pagine
         - Redirect su form inserimento se non ci sono i dati dell'utente
     - Vedere come implementare lo splash screen
+    - Gestire routing verso home da pagina di inserimento dati utente e modifica spostamento

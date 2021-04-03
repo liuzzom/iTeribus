@@ -286,9 +286,8 @@ export class UserInfoFormPage implements OnInit {
       color: 'success',
       duration: 2000
     });
-    toast.addEventListener('ionToastDidDismiss', () => {
-      this.router.navigate(['/home'])});
     toast.present();
+    this.router.navigate(['/home']);
   }
 
   async unsuccessToast() {
@@ -297,8 +296,8 @@ export class UserInfoFormPage implements OnInit {
       message: 'Errore: impossibile salvare i dati.',
       duration: 2000
     });
-    toast.addEventListener('ionToastDidDismiss', () => this.router.navigate(['/user-info-form']));
     toast.present();
+    this.router.navigate(['/user-info-form']);
   }
 
 }

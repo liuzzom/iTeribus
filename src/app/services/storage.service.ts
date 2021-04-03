@@ -21,6 +21,10 @@ export class StorageService {
     return data;
   }
 
+  public async remove(key: string){
+    return await this.storage.remove(key);
+  }
+
   // Create and expose methods that users of this service can
   // call, for example:
   public async set(key: string, value: any) {

@@ -4,7 +4,7 @@ import { IonicModule } from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
 import { HomePage } from './home.page';
 
-import {MatExpansionModule} from '@angular/material/expansion';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 import { HomePageRoutingModule } from './home-routing.module';
 
@@ -19,4 +19,4 @@ import { HomePageRoutingModule } from './home-routing.module';
   ],
   declarations: [HomePage]
 })
-export class HomePageModule {}
+export class HomePageModule { }
