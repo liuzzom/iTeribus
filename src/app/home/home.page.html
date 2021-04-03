@@ -47,37 +47,47 @@
       </ion-toolbar>
     </ion-header> -->
     <ion-list>
-      <ion-item>
+      <ion-item *ngFor="let movement of movements; let i = index">
         <ion-card style="width: 100%;">
           <ion-card-header>
-            <ion-card-title>Nome Spostamento</ion-card-title>
-            <ion-card-subtitle>Partenza: Via del Campo 22</ion-card-subtitle>
-            <ion-card-subtitle>Arrivo: Piazza della Repubblica 77</ion-card-subtitle>
+            <ion-card-title>{{movement.name}}</ion-card-title>
+            <ion-card-subtitle>Partenza: {{movement.departure}}</ion-card-subtitle>
+            <ion-card-subtitle>Arrivo: {{movement.destination}}</ion-card-subtitle>
           </ion-card-header>
           <ion-card-content>
             <mat-accordion>
               <mat-expansion-panel>
                 <mat-expansion-panel-header>
-                  <mat-expansion-title>
+                  <mat-panel-title>
                     <ion-icon name="settings" color="primary" size="small"></ion-icon>
                     <span style="margin-right: 1em"></span>
                     <span>Impostazioni</span>
-                  </mat-expansion-title>
+                  </mat-panel-title>
                 </mat-expansion-panel-header>
 
                 <ion-item>
-                  <ion-checkbox color="primary" checked slot="start"></ion-checkbox>
+                  <ion-checkbox id="checkbox-{{i}}"  color="primary" slot="start"></ion-checkbox><!--TODO: checked bindato con repeat-->
                   <span style="margin-right: 1em"></span>
                   <ion-label>Generazione Automatica Modulo</ion-label>
                 </ion-item>
-                <form>
+                <form >
                   <ion-item-group>
                     <ion-item>
-                      <ion-label position="floating">Genera ogni:</ion-label>
+                      <ion-label position="stacked">Ripeti:</ion-label>
+                      <ion-select multiple>
+                        <ion-select-option value="1">Lunedì</ion-select-option>
+                        <ion-select-option value="2">Martedì</ion-select-option>
+                        <ion-select-option value="3">Mercoledì</ion-select-option>
+                        <ion-select-option value="4">Giovedì</ion-select-option>
+                        <ion-select-option value="5">Venerdì</ion-select-option>
+                        <ion-select-option value="6">Sabato</ion-select-option>
+                        <ion-select-option value="7">Domenica</ion-select-option>
+                      </ion-select>
+                      <!-- <ion-label position="floating">Genera ogni:</ion-label>
                       <ion-select interface="action-sheet">
                         <ion-select-option>Giorno</ion-select-option>
                         <ion-select-option>Settimana</ion-select-option>
-                      </ion-select>
+                      </ion-select> -->
                     </ion-item>
                     <ion-item>
                       <ion-label position="floating">alle:</ion-label>
@@ -104,13 +114,13 @@
       </ion-item>
     </ion-list>
 
-    <div>
+    <!-- <div>
       <p>
         <a href="./user-info-form">Creazione Profilo Utente</a>
       </p>
       <p>
         <a href="./user-info">Modifica e Riepilogo Profili utente</a>
       </p>
-    </div>
+    </div> -->
   </ion-content>
 </div>

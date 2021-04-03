@@ -1,8 +1,12 @@
-a{
+a {
   font-size: large;
 }
 
-.card-buttons-container{
+.card-buttons-container {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
   display: flex;
-  justify-content: end;
+  justify-content: flex-end;
 }

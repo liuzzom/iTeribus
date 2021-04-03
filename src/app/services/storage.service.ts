@@ -16,8 +16,8 @@ export class StorageService {
     await this.storage.create();
   }
 
-  public async get(key: string){
-    const data =  await this.storage.get(key);
+  public async get(key: string) {
+    const data = await this.storage.get(key);
     return data;
   }
 
@@ -26,4 +26,15 @@ export class StorageService {
   public async set(key: string, value: any) {
     await this.storage.set(key, value);
   }
+
+  public async getMovements() {
+    let data = [];
+    await this.storage.forEach((value, key, index) => {
+      if (key !== 'user') {
+        data.push(value);
+      }
+    });
+    return data;
+  }
+
 }
