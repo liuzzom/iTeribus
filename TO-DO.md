@@ -13,11 +13,9 @@
     - Home Page
         - Vedere se Ionic fornisce qualcosa per gli eventi temporizzati
         - Inizializzare form interni a card degli spostamenti per ripetizioni
-
     - Spostamenti
-        - visualiazzione con read only
-        - modifica spostamento
-        - cancellazione spostamento
+        - visualizzazione con read only
+        - inserimento e modifica spostamento
     - Su tutte le pagine
         - Redirect su form inserimento se non ci sono i dati dell'utente
     - Vedere come implementare lo splash screen

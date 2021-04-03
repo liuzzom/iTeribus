@@ -1,0 +1,57 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>
+      Itineribus
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div id="container">
+    <form [formGroup]="movementFormGroup">
+      <!--Nome Spostamento-->
+      <ion-item-group>
+        <ion-item>
+          <ion-label position="floating">Nome</ion-label>
+          <ion-input formControlName="name"></ion-input>
+        </ion-item>
+      </ion-item-group>
+      <!--Motivazione Spostamento-->
+      <ion-item-group>
+        <ion-item>
+          <ion-label position="floating">Motivazione</ion-label>
+          <ion-select #reason interface="action-sheet" formControlName="reason"(ionChange)="checkReason(reason)">
+            <ion-select-option value="MovementReason.WORK">Comprovate Esigenza Lavorative</ion-select-option>
+            <ion-select-option value="MovementReason.HEALTH">Salute</ion-select-option>
+            <ion-select-option value="MovementReason.SHOP">Acquisto di Beni di Prima Necessità</ion-select-option>
+            <ion-select-option value="MovementReason.STUDY">Studio</ion-select-option>
+            <ion-select-option value="MovementReason.VISIT_RELATIVE">Visita a Congiunto</ion-select-option>
+            <ion-select-option value="MovementReason.RETURN_HOME">Ritorno nel Luogo di Residenza</ion-select-option>
+            <ion-select-option value="MovementReason.OTHER">Altro</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-item *ngIf="other">
+          <ion-input formControlName="otherReasonMessage" placeholder="Specificare la Motivazione"></ion-input>
+        </ion-item>
+      </ion-item-group>
+      <!--Partenza & Destinazione-->
+      <ion-item-group>
+        <ion-item>
+          <ion-label position="floating">Indirizzo di Partenza</ion-label>
+          <ion-input formControlName="departure"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="floating">Indirizzo di Destinazione</ion-label>
+          <ion-input formControlName="destination"></ion-input>
+        </ion-item>
+      </ion-item-group>
+      <!--Dichiarazioni Addizionali-->
+      <ion-item-group>
+        <ion-item>
+          <ion-label position="floating">Dichiarazioni Addizionali</ion-label>
+          <ion-textarea formControlName="notes"></ion-textarea>
+        </ion-item>
+      </ion-item-group>
+    </form>
+  </div>
+</ion-content>

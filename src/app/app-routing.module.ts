@@ -19,6 +19,10 @@ const routes: Routes = [
     path: 'user-info',
     loadChildren: () => import('./user-info/user-info.module').then( m => m.UserInfoPageModule)
   },
+  {
+    path: 'new-movement',
+    loadChildren: () => import('./new-movement/new-movement.module').then( m => m.NewMovementPageModule)
+  },
 ];
 
 @NgModule({

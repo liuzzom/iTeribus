@@ -1,3 +1,4 @@
+import { MovementReason } from './../../domain-model/MovementReason';
 import { User } from './../../domain-model/User';
 import { Movement } from './../../domain-model/Movement';
 import { Place } from './../../domain-model/Place';
@@ -250,27 +251,27 @@ export class UserInfoFormPage implements OnInit {
 
       if (work) {
 
-        const workMovement = new Movement('Lavoro', 'work', `${userData.domicile.address}, ${userData.domicile.municipality}`, work);
+        const workMovement = new Movement('Lavoro', MovementReason.WORK, `${userData.domicile.address}, ${userData.domicile.municipality}`, work);
         this.storageService.set(workMovement.name, workMovement);
 
 
       }
       if (school) {
-        const schoolMovement = new Movement('Scuola', 'school', `${userData.domicile.address}, ${userData.domicile.municipality}`, school);
+        const schoolMovement = new Movement('Scuola', MovementReason.STUDY, `${userData.domicile.address}, ${userData.domicile.municipality}`, school);
         this.storageService.set(schoolMovement.name, schoolMovement);
       }
       if (foodMarket) {
         const foodMarketMovement =
-          new Movement('Spesa', 'foodMarket', `${userData.domicile.address}, ${userData.domicile.municipality}`, foodMarket);
+          new Movement('Spesa', MovementReason.SHOP, `${userData.domicile.address}, ${userData.domicile.municipality}`, foodMarket);
         this.storageService.set(foodMarketMovement.name, foodMarketMovement);
 
       }
       if (relative) {
-        const relativeMovement = new Movement('Visita a Parente', 'relative', `${userData.domicile.address}, ${userData.domicile.municipality}`, relative);
+        const relativeMovement = new Movement('Visita a Parente', MovementReason.VISIT_RELATIVE, `${userData.domicile.address}, ${userData.domicile.municipality}`, relative);
         this.storageService.set(relativeMovement.name, relativeMovement);
       }
       if (familyDoctor) {
-        const relativeMovement = new Movement('Medico di Famiglia', 'familyDoctor', `${userData.domicile.address}, ${userData.domicile.municipality}`, familyDoctor);
+        const relativeMovement = new Movement('Medico di Famiglia', MovementReason.HEALTH, `${userData.domicile.address}, ${userData.domicile.municipality}`, familyDoctor);
         this.storageService.set(relativeMovement.name, relativeMovement);
       }
     }
