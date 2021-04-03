@@ -1,6 +1,7 @@
 # TO DO
 
-- Creazione Schermate:
+- Schermate:
+    - Primo Avvio (Form Registrazione Utente)
     - Schermata per visualizzazione/modifica utente
     - Home Page
     - Form Inserimento Spostamento
@@ -9,8 +10,9 @@
     - Dialog per Rimozione Spostamento
 
 - Funzionalità:
-    - Visualizza/Modifica Utent
-        - Modalità basata su link di arrivo (2 link in Home Page)
+    - Home Page
+        - Get per gli spostamenti (vedere get con più chiavi)
+        - Vedere se Ionic fornisce qualcosa per gli eventi temporizzati
     - Su tutte le pagine
         - Redirect su form inserimento se non ci sono i dati dell'utente
     - Vedere come implementare lo splash screen
