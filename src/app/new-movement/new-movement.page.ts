@@ -9,9 +9,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./new-movement.page.scss'],
 })
 export class NewMovementPage implements OnInit {
-
   movementFormGroup: FormGroup;
-
   other: boolean = false;
 
   constructor(
@@ -24,7 +22,7 @@ export class NewMovementPage implements OnInit {
     this.movementFormGroup = this.formBuilder.group({
       name: new FormControl('', [Validators.required]),
       reason: new FormControl('', [Validators.required]),
-      otherReasonMessage: new FormControl('', []),//TODO: required solo se reason == OTHER
+      otherReasonMessage: new FormControl('', []),
       departure: new FormControl('', [Validators.required]),
       destination: new FormControl('', [Validators.required]),
       notes: new FormControl('', [Validators.required])
@@ -32,9 +30,14 @@ export class NewMovementPage implements OnInit {
   }
 
   checkReason(reason){
-    this.other = reason.value === 'MovementReason.OTHER' ? true : false;
+    this.other = reason.value === 'MovementReason.OTHER';
     console.log(this.other);
 
+    if(this.other) {
+      this.movementFormGroup.setControl('otherReasonMessage', new FormControl('', [Validators.required]));
+    } else {
+      this.movementFormGroup.setControl('otherReasonMessage', new FormControl('', []));
+    }
   }
 
 }

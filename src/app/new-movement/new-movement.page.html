@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar color="primary">
     <ion-title>
-      Itineribus
+      iTineribus
     </ion-title>
   </ion-toolbar>
 </ion-header>
@@ -20,7 +20,7 @@
       <ion-item-group>
         <ion-item>
           <ion-label position="floating">Motivazione</ion-label>
-          <ion-select #reason interface="action-sheet" formControlName="reason"(ionChange)="checkReason(reason)">
+          <ion-select #reason interface="action-sheet" formControlName="reason" (ionChange)="checkReason(reason)">
             <ion-select-option value="MovementReason.WORK">Comprovate Esigenza Lavorative</ion-select-option>
             <ion-select-option value="MovementReason.HEALTH">Salute</ion-select-option>
             <ion-select-option value="MovementReason.SHOP">Acquisto di Beni di Prima Necessità</ion-select-option>
@@ -53,5 +53,21 @@
         </ion-item>
       </ion-item-group>
     </form>
+
+    <!-- Buttons Section -->
+    <ion-fab horizontal="end" vertical="bottom">
+      <ion-row>
+        <ion-col>
+          <ion-fab-button id="undoFab" color="tertiary">
+            <ion-icon name="arrow-undo-outline"></ion-icon>
+          </ion-fab-button>
+        </ion-col>
+        <ion-col>
+          <ion-fab-button id="saveFab" color="primary">
+            <ion-icon name="save-outline"></ion-icon>
+          </ion-fab-button>
+        </ion-col>
+      </ion-row>
+    </ion-fab>
   </div>
 </ion-content>

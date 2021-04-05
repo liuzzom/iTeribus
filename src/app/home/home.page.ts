@@ -26,13 +26,15 @@ export class HomePage implements OnInit {
   }
 
   async ngOnInit() {
+    // Check if the storage contains user information
     const user = await this.storageService.get('user');
 
     if (!user) {
+      // There is no user information...redirect to the user registration form
       this.router.navigate(['./user-info-form']);
-
     }
 
+    // Get movements from storage using the service
     this.movements = await this.storageService.getMovements();
   }
 
