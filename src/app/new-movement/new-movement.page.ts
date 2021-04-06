@@ -63,6 +63,7 @@ export class NewMovementPage implements OnInit {
       return;
     }
 
+    // Check if the name is already used
     const movements = await this.storageService.getMovements();
     const nameAlreadyUsed = movements.find((movement) => {
       if(movement.name === this.movementFormGroup.get('name').value) return true;
