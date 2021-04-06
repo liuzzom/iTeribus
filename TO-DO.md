@@ -7,7 +7,7 @@
     - Form Inserimento Spostamento
         - Input per motivazione required solo motivazione === other
         - Inserimento bottoni salva/annulla
-        - Inserimento effettuvo nello storage
+        - Inserimento effettivo nello storage
         - Feedback success/error
     - Schermata per visualizzazione/modifica spostamenti
     - Dialog per Generazione Modulo

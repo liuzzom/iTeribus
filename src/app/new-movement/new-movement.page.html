@@ -31,7 +31,7 @@
           </ion-select>
         </ion-item>
         <ion-item *ngIf="other">
-          <ion-input formControlName="otherReasonMessage" placeholder="Specificare la Motivazione"></ion-input>
+          <ion-input formControlName="otherReasonMessage" placeholder="Specificare la Motivazione (Obbligatorio)"></ion-input>
         </ion-item>
       </ion-item-group>
       <!--Partenza & Destinazione-->
@@ -58,12 +58,12 @@
     <ion-fab horizontal="end" vertical="bottom">
       <ion-row>
         <ion-col>
-          <ion-fab-button id="undoFab" color="tertiary">
+          <ion-fab-button id="undoFab" color="tertiary" (click)="goHome()">
             <ion-icon name="arrow-undo-outline"></ion-icon>
           </ion-fab-button>
         </ion-col>
         <ion-col>
-          <ion-fab-button id="saveFab" color="primary">
+          <ion-fab-button id="saveFab" color="primary" (click)="addMovement()">
             <ion-icon name="save-outline"></ion-icon>
           </ion-fab-button>
         </ion-col>

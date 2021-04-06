@@ -6,7 +6,6 @@ import { GeoService } from '../services/geo.service';
 import { Region } from '../../domain-model/Region';
 import { Province } from '../../domain-model/Province';
 import { Municipality } from '../../domain-model/Municipality';
-import { DatePipe } from '@angular/common';
 import { ToastController } from '@ionic/angular';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Observable } from "rxjs";
@@ -21,6 +20,7 @@ import { Place } from "../../domain-model/Place";
 export class UserInfoPage implements OnInit {
   private readonly addressPattern = '^[A-Za-z][a-zàèéìòù]* ([A-Z-a-zàèéìòù]+\\.?)*\\ ?([A-Za-z][a-zàèéìòù]*)? ?([A-Za-zàèéìòù]*)+ (\\d+(\\/?[A-Z[a-z]+)?)';
   private user: User;
+  private valid: boolean;
 
   // false: view mode, true: edit mode
   editMode: boolean = false;
@@ -28,7 +28,6 @@ export class UserInfoPage implements OnInit {
   anagraphicFormGroup: FormGroup;
   documentFormGroup: FormGroup;
   residenceDomicileFormGroup: FormGroup;
-  // initialMovementsFormGroup: FormGroup;
 
   regions: Region[];
 
@@ -64,9 +63,11 @@ export class UserInfoPage implements OnInit {
     this.user = await this.storageService.get('user');
 
     if (!this.user) {
+      // There is no user data. redirect to registration form
       this.router.navigate(['./user-info-form']);
     }
 
+    // Set the mode basing on url
     this.editMode = this.activatedRoute.snapshot.paramMap.get('mode') === 'edit' ? true : false;
 
     // Get Regions
@@ -168,14 +169,22 @@ export class UserInfoPage implements OnInit {
 
   // ----- Handler Section ----- \\
 
-
   toggleEditMode() {
     this.editMode = !this.editMode;
   }
 
+  // TODO: mettere una funzione che porta alla home se si arriva dal link di modifica
   undo() {
+    if(this.activatedRoute.snapshot.paramMap.get('mode') === 'edit'){
+      this.router.navigate(['/home']);
+    }
     this.fillForm();
     this.toggleEditMode();
+  }
+
+  // go to home page when back button is clicked ()
+  goHome() {
+    this.router.navigate(['/home']);
   }
 
   // Handle changes in domicile checkbox
@@ -209,7 +218,7 @@ export class UserInfoPage implements OnInit {
     this.residenceDomicileFormGroup.get(key).setValue(value);
   }
 
-  // ----- Geographical Filtering for Select -----
+  // ----- Geographical Filtering for Select ----- \\
 
   getProvinceObservable(mode: string): Observable<Province[]> {
     if (mode === 'residence') {
@@ -300,6 +309,13 @@ export class UserInfoPage implements OnInit {
   // ----- Storage Section ----- \\
 
   editUserInfo() {
+    // Check if all the forms are valid
+    this.valid = this.anagraphicFormGroup.valid && this.documentFormGroup.valid && this.residenceDomicileFormGroup.valid;
+    if(!this.valid){
+      this.unsuccessToast('Errore! Controlla i dati inseriti e riprova');
+      return;
+    }
+
     const name = this.capitalize(this.anagraphicFormGroup.get('name').value);
     const surname = this.capitalize(this.anagraphicFormGroup.get('surname').value);
 
@@ -342,7 +358,7 @@ export class UserInfoPage implements OnInit {
       };
     }
 
-    this.storageService.set('user', userData).then(() => this.successToast()).catch(() => this.unsuccessToast());
+    this.storageService.set('user', userData).then(() => this.successToast()).catch(() => this.unsuccessToast('Errore: impossibile salvare i dati.'));
   }
 
   // ----- Feedback Section ----- \\
@@ -354,17 +370,15 @@ export class UserInfoPage implements OnInit {
       duration: 2000
     });
     toast.present();
-
     this.router.navigate(['/home']);
   }
 
-  async unsuccessToast() {
+  async unsuccessToast(message) {
     const toast = await this.toastController.create({
       color: 'danger',
-      message: 'Errore: impossibile salvare i dati.',
+      message: message,
       duration: 2000
     });
     toast.present();
-    this.router.navigate(['/user-info-form']);
   }
 }

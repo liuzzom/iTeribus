@@ -9,7 +9,6 @@ import { GeoService } from '../services/geo.service';
 import { Region } from '../../domain-model/Region';
 import { Province } from '../../domain-model/Province';
 import { Municipality } from '../../domain-model/Municipality';
-import { DatePipe } from '@angular/common';
 import { ToastController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { Document } from 'src/domain-model/Document';
@@ -103,6 +102,8 @@ export class UserInfoFormPage implements OnInit {
   }
 
 
+  // ----- Handler Section ----- \\
+
   toggleDomicileCheckbox() {
     this.domicileChecked = !this.domicileChecked;
 
@@ -135,7 +136,7 @@ export class UserInfoFormPage implements OnInit {
   }
 
 
-  // ----- Geographical Filtering for Select -----
+  // ----- Geographical Filtering for Select ----- \\
 
   getProvince(mode: string) {
     if (mode === 'residence') {
@@ -197,6 +198,8 @@ export class UserInfoFormPage implements OnInit {
     return str.split(' ').map(str => str.charAt(0).toUpperCase() + str.slice(1)).join(' ');
   }
 
+  // ----- Storage Section ----- \\
+
   addUserInfo() {
 
     const name = this.capitalize(this.anagraphicFormGroup.get('name').value);
@@ -250,36 +253,39 @@ export class UserInfoFormPage implements OnInit {
     if (work || school || foodMarket || relative || familyDoctor) {
 
       if (work) {
-
         const workMovement = new Movement('Lavoro', MovementReason.WORK, `${userData.domicile.address}, ${userData.domicile.municipality}`, work);
         this.storageService.set(workMovement.name, workMovement);
-
-
       }
+
       if (school) {
         const schoolMovement = new Movement('Scuola', MovementReason.STUDY, `${userData.domicile.address}, ${userData.domicile.municipality}`, school);
         this.storageService.set(schoolMovement.name, schoolMovement);
       }
+
       if (foodMarket) {
         const foodMarketMovement =
           new Movement('Spesa', MovementReason.SHOP, `${userData.domicile.address}, ${userData.domicile.municipality}`, foodMarket);
         this.storageService.set(foodMarketMovement.name, foodMarketMovement);
-
       }
+
       if (relative) {
         const relativeMovement = new Movement('Visita a Parente', MovementReason.VISIT_RELATIVE, `${userData.domicile.address}, ${userData.domicile.municipality}`, relative);
         this.storageService.set(relativeMovement.name, relativeMovement);
       }
+
       if (familyDoctor) {
         const relativeMovement = new Movement('Medico di Famiglia', MovementReason.HEALTH, `${userData.domicile.address}, ${userData.domicile.municipality}`, familyDoctor);
         this.storageService.set(relativeMovement.name, relativeMovement);
       }
+
     }
 
 
 
     this.storageService.set('user', userData).then(() => this.successToast()).catch(() => this.unsuccessToast());
   }
+
+  // ----- Feedback Section ----- \\
 
   async successToast() {
     const toast = await this.toastController.create({

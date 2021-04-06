@@ -8,7 +8,6 @@
 
 <ion-content>
   <div id="container">
-
     <mat-vertical-stepper linear>
       <mat-step label="Dati Anagrafici" [stepControl]="anagraphicFormGroup">
         <form [formGroup]="anagraphicFormGroup">
@@ -155,9 +154,20 @@
 
     <!-- Buttons Section -->
     <ion-fab horizontal="end" vertical="bottom">
-      <ion-fab-button *ngIf="!editMode; else saveUndoButtons" color="tertiary" (click)="toggleEditMode()">
-        <ion-icon id="editFab" name="create-outline"></ion-icon>
-      </ion-fab-button>
+      <!-- View Buttons -->
+      <ion-row *ngIf="!editMode; else saveUndoButtons">
+        <ion-col>
+          <ion-fab-button color="tertiary" (click)="goHome()">
+            <ion-icon id="goHome" name="arrow-undo-outline"></ion-icon>
+          </ion-fab-button>
+        </ion-col>
+        <ion-col>
+          <ion-fab-button color="primary" (click)="toggleEditMode()">
+            <ion-icon id="editFab" name="create-outline"></ion-icon>
+          </ion-fab-button>
+        </ion-col>
+      </ion-row>
+      <!-- Edit Buttons -->
       <ng-template #saveUndoButtons>
         <ion-row>
           <ion-col>
@@ -173,7 +183,8 @@
         </ion-row>
       </ng-template>
     </ion-fab>
+    {{anagraphicFormGroup.valid}}
+    {{documentFormGroup.valid}}
+    {{residenceDomicileFormGroup.valid}}
   </div>
-
-
 </ion-content>
