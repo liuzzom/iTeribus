@@ -1,4 +1,4 @@
 export interface GenerationOptions{
-    dayOfWeeks: number[];
+    days: number[];
     time: string;
 }

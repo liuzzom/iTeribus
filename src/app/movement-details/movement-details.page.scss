@@ -1,0 +1,20 @@
+ion-item-group{
+  margin-bottom: 32px;
+}
+
+form {
+  margin-top: 32px;
+}
+
+#container {
+  margin: 0 auto;
+  width: 98%;
+  height: calc(100% - 32px);
+  text-align: center;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+}
+

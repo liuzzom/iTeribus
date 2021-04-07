@@ -23,6 +23,10 @@ const routes: Routes = [
     path: 'new-movement',
     loadChildren: () => import('./new-movement/new-movement.module').then( m => m.NewMovementPageModule)
   },
+  {
+    path: 'movement-details',
+    loadChildren: () => import('./movement-details/movement-details.module').then( m => m.MovementDetailsPageModule)
+  },
 ];
 
 @NgModule({

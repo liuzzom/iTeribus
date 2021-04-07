@@ -2,57 +2,21 @@
   <ion-list>
     <ion-item *ngFor="let movement of movements; let i = index">
       <ion-card style="width: 100%;">
+        <a href="./movement-details/{{movement.name}}/view">
         <ion-card-header>
           <ion-card-title>{{movement.name}}</ion-card-title>
           <ion-card-subtitle>Partenza: {{movement.departure}}</ion-card-subtitle>
           <ion-card-subtitle>Arrivo: {{movement.destination}}</ion-card-subtitle>
         </ion-card-header>
+        </a>
         <ion-card-content>
-          <mat-accordion>
-            <mat-expansion-panel>
-              <mat-expansion-panel-header>
-                <mat-panel-title>
-                  <ion-icon name="settings" color="primary" size="small"></ion-icon>
-                  <span style="margin-right: 1em"></span>
-                  <span>Impostazioni</span>
-                </mat-panel-title>
-              </mat-expansion-panel-header>
-              <ion-item>
-                <ion-checkbox id="checkbox-{{i}}" color="primary" slot="start"></ion-checkbox>
-                <!--TODO: checked bindato con repeat-->
-                <span style="margin-right: 1em"></span>
-                <ion-label>Generazione Automatica Modulo</ion-label>
-              </ion-item>
-              <form>
-                <ion-item-group>
-                  <ion-item>
-                    <ion-label position="stacked">Ripeti:</ion-label>
-                    <ion-select multiple>
-                      <ion-select-option value="1">Lunedì</ion-select-option>
-                      <ion-select-option value="2">Martedì</ion-select-option>
-                      <ion-select-option value="3">Mercoledì</ion-select-option>
-                      <ion-select-option value="4">Giovedì</ion-select-option>
-                      <ion-select-option value="5">Venerdì</ion-select-option>
-                      <ion-select-option value="6">Sabato</ion-select-option>
-                      <ion-select-option value="7">Domenica</ion-select-option>
-                    </ion-select>
-                  </ion-item>
-                  <ion-item>
-                    <ion-label position="floating">alle:</ion-label>
-                    <ion-datetime displayFormat="HH mm"></ion-datetime>
-                  </ion-item>
-                </ion-item-group>
-              </form>
-
-            </mat-expansion-panel>
-          </mat-accordion>
           <!-- Buttons Container -->
           <div class="card-buttons-container">
-            <ion-fab-button size="small">
-              <ion-icon name="eye-outline"></ion-icon>
+            <ion-fab-button size="small" href="./movement-details/{{movement.name}}/edit">
+              <ion-icon name="create-outline"></ion-icon>
             </ion-fab-button>
             <ion-fab-button size="small" color="secondary">
-              <ion-icon name="document-text-outline"></ion-icon>
+              <ion-icon name="print-outline"></ion-icon>
             </ion-fab-button>
             <!-- Delete Button -->
             <ion-fab-button size="small" color="danger" (click)="showAlert(i)">

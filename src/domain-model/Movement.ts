@@ -7,7 +7,7 @@ export class Movement {
     departure: string;
     destination: string;
     notes?: string;
-    repeat?: boolean;
+    public repeat?: boolean;
     generationOptions?: GenerationOptions;
 
     constructor(

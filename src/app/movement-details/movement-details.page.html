@@ -1,0 +1,105 @@
+<ion-content>
+  <div id="container">
+    <form [formGroup]="movementFormGroup">
+      <!--Nome Spostamento-->
+      <ion-item-group>
+        <ion-item [disabled]="!editMode">
+          <ion-label position="floating">Nome</ion-label>
+          <ion-input formControlName="name"></ion-input>
+        </ion-item>
+      </ion-item-group>
+      <!--Motivazione Spostamento-->
+      <ion-item-group>
+        <ion-item [disabled]="!editMode">
+          <ion-label position="floating">Motivazione</ion-label>
+          <ion-select #reason interface="action-sheet" formControlName="reason" (ionChange)="checkReason(reason)">
+            <ion-select-option value="MovementReason.WORK">Comprovate Esigenza Lavorative</ion-select-option>
+            <ion-select-option value="MovementReason.HEALTH">Salute</ion-select-option>
+            <ion-select-option value="MovementReason.SHOP">Acquisto di Beni di Prima Necessità</ion-select-option>
+            <ion-select-option value="MovementReason.STUDY">Studio</ion-select-option>
+            <ion-select-option value="MovementReason.VISIT_RELATIVE">Visita a Congiunto</ion-select-option>
+            <ion-select-option value="MovementReason.RETURN_HOME">Ritorno nel Luogo di Residenza</ion-select-option>
+            <ion-select-option value="MovementReason.OTHER">Altro</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-item [disabled]="!editMode" *ngIf="other">
+          <ion-input formControlName="otherReasonMessage" placeholder="Specificare la Motivazione (Obbligatorio)"></ion-input>
+        </ion-item>
+      </ion-item-group>
+      <!--Partenza & Destinazione-->
+      <ion-item-group>
+        <ion-item [disabled]="!editMode">
+          <ion-label position="floating">Indirizzo di Partenza</ion-label>
+          <ion-input formControlName="departure"></ion-input>
+        </ion-item>
+        <ion-item [disabled]="!editMode">
+          <ion-label position="floating">Indirizzo di Destinazione</ion-label>
+          <ion-input formControlName="destination"></ion-input>
+        </ion-item>
+      </ion-item-group>
+      <!--Dichiarazioni Addizionali-->
+      <ion-item-group>
+        <ion-item [disabled]="!editMode">
+          <ion-label position="floating">Dichiarazioni Addizionali</ion-label>
+          <ion-textarea formControlName="notes"></ion-textarea>
+        </ion-item>
+      </ion-item-group>
+      <!-- Generazione Automatica -->
+      <ion-item [disabled]="!editMode">
+        <ion-checkbox id="repeatCheckbox" (ionChange)="toggleRepeatCheckbox()"></ion-checkbox>
+        <span style="margin-right: 1em"></span>
+        <ion-label>Ripeti</ion-label>
+      </ion-item>
+      <ion-item-group *ngIf="repeatChecked">
+        <ion-item>
+          <ion-label position="fixed">Ogni:</ion-label>
+          <ion-select [disabled]="!editMode" formControlName="days" multiple>
+            <ion-select-option value="1">Lunedì</ion-select-option>
+            <ion-select-option value="2">Martedì</ion-select-option>
+            <ion-select-option value="3">Mercoledì</ion-select-option>
+            <ion-select-option value="4">Giovedì</ion-select-option>
+            <ion-select-option value="5">Venerdì</ion-select-option>
+            <ion-select-option value="6">Sabato</ion-select-option>
+            <ion-select-option value="7">Domenica</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-item>
+          <ion-label position="fixed">Alle:</ion-label>
+          <ion-datetime [disabled]="!editMode" formControlName="time" displayFormat="HH mm"></ion-datetime>
+        </ion-item>
+      </ion-item-group>
+    </form>
+
+    <!-- Buttons Section -->
+    <ion-fab horizontal="end" vertical="bottom">
+      <!-- View Buttons -->
+      <ion-row *ngIf="!editMode; else saveUndoButtons">
+        <ion-col>
+          <ion-fab-button color="tertiary" (click)="goHome()">
+            <ion-icon id="goHome" name="arrow-undo-outline"></ion-icon>
+          </ion-fab-button>
+        </ion-col>
+        <ion-col>
+          <ion-fab-button color="primary" (click)="toggleEditMode()">
+            <ion-icon id="editFab" name="create-outline"></ion-icon>
+          </ion-fab-button>
+        </ion-col>
+      </ion-row>
+      <!-- Edit Buttons -->
+      <ng-template #saveUndoButtons>
+        <ion-row>
+          <ion-col>
+            <ion-fab-button id="undoFab" color="tertiary" (click)="undo()">
+              <ion-icon name="arrow-undo-outline"></ion-icon>
+            </ion-fab-button>
+          </ion-col>
+          <ion-col>
+            <ion-fab-button id="saveFab" color="primary" (click)="editMovement()">
+              <ion-icon name="save-outline"></ion-icon>
+            </ion-fab-button>
+          </ion-col>
+        </ion-row>
+      </ng-template>
+    </ion-fab>
+  </div>
+</ion-content>

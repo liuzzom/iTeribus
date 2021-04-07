@@ -70,7 +70,7 @@ export class NewMovementPage implements OnInit {
     });
 
     if(nameAlreadyUsed){
-      this.unsuccessToast('Errore! Il nome inserito è stato utilizzato');
+      await this.unsuccessToast('Errore! Il nome inserito è già stato utilizzato');
       return;
     }
 
