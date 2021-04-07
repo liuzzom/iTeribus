@@ -5,6 +5,7 @@ import { Component, OnInit } from '@angular/core';
 import {Router} from "@angular/router";
 import {Movement} from "../../domain-model/Movement";
 import {MovementReason} from "../../domain-model/MovementReason";
+import {User} from "../../domain-model/User";
 
 @Component({
   selector: 'app-new-movement',
@@ -14,6 +15,7 @@ import {MovementReason} from "../../domain-model/MovementReason";
 export class NewMovementPage implements OnInit {
   movementFormGroup: FormGroup;
   other: boolean = false;
+  user: User;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -22,7 +24,8 @@ export class NewMovementPage implements OnInit {
     private router: Router
   ) { }
 
-  ngOnInit() {
+  async ngOnInit() {
+    // Initialize the form
     this.movementFormGroup = this.formBuilder.group({
       name: new FormControl('Lavoro', [Validators.required]),
       reason: new FormControl('MovementReason.WORK', [Validators.required]),
@@ -31,6 +34,14 @@ export class NewMovementPage implements OnInit {
       destination: new FormControl('Via del Mezzetta 9/G, Firenze (FI)', [Validators.required]),
       notes: new FormControl('', [])
     });
+
+    // Get User data from Storage
+    this.user = await this.storageService.get('user');
+
+    if (!this.user) {
+      // There is no user data. redirect to registration form
+      await this.router.navigate(['./user-info-form']);
+    }
   }
 
   // ----- Handler Section ----- \\
