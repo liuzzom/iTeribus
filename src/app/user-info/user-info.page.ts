@@ -173,7 +173,6 @@ export class UserInfoPage implements OnInit {
     this.editMode = !this.editMode;
   }
 
-  // TODO: mettere una funzione che porta alla home se si arriva dal link di modifica
   undo() {
     if(this.activatedRoute.snapshot.paramMap.get('mode') === 'edit'){
       this.router.navigate(['/home']);

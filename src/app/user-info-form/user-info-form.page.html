@@ -1,11 +1,3 @@
-<ion-header>
-  <ion-toolbar color="primary">
-    <ion-title>
-      iTineribus
-    </ion-title>
-  </ion-toolbar>
-</ion-header>
-
 <ion-content>
   <div id="container">
 
@@ -74,37 +66,43 @@
             </ion-item-divider>
             <ion-item>
               <ion-label position="floating">Regione</ion-label>
-              <ion-select [formControl]="residenceDomicileFormGroup.controls['residenceRegion']" interface="action-sheet"
+              <ion-select [formControl]="residenceDomicileFormGroup.controls['residenceRegion']"
+                          interface="action-sheet"
                           (ionFocus)="clearProvMunFields('residence')" (ionChange)="getProvince('residence')">
-                <ion-select-option *ngFor="let region of regions" value="{{region.id_regione}}">{{region.regione}}</ion-select-option>
+                <ion-select-option *ngFor="let region of regions"
+                                   value="{{region.id_regione}}">{{region.regione}}</ion-select-option>
               </ion-select>
             </ion-item>
             <ion-item [disabled]="!getGeographicalControl('residenceRegion').valid">
               <ion-label position="floating">Provincia</ion-label>
-              <ion-select [formControl]="residenceDomicileFormGroup.controls['residenceProvince']" interface="action-sheet"
+              <ion-select [formControl]="residenceDomicileFormGroup.controls['residenceProvince']"
+                          interface="action-sheet"
                           (ionFocus)="clearMunFields('residence')" (ionChange)="getMunicipalities('residence')">
-                <ion-select-option *ngFor="let province of residenceProvinces" value="{{province.sigla}}">{{province.provincia}}</ion-select-option>
+                <ion-select-option *ngFor="let province of residenceProvinces"
+                                   value="{{province.sigla}}">{{province.provincia}}</ion-select-option>
               </ion-select>
             </ion-item>
             <ion-item [disabled]="!getGeographicalControl('residenceProvince').valid">
               <ion-label position="floating">Città</ion-label>
-              <ion-select [formControl]="residenceDomicileFormGroup.controls['residenceMunicipality']" interface="action-sheet">
-                <ion-select-option *ngFor="let municipality of residenceMunicipalities" value="{{municipality.comune}}">{{municipality.comune}}</ion-select-option>
+              <ion-select [formControl]="residenceDomicileFormGroup.controls['residenceMunicipality']"
+                          interface="action-sheet">
+                <ion-select-option *ngFor="let municipality of residenceMunicipalities"
+                                   value="{{municipality.comune}}">{{municipality.comune}}</ion-select-option>
               </ion-select>
             </ion-item>
             <ion-item>
               <ion-label position="floating">Indirizzo</ion-label>
               <ion-input [formControl]="residenceDomicileFormGroup.controls['residenceAddress']"></ion-input>
             </ion-item>
-            
+
           </ion-item-group>
 
           <ion-item>
-            <ion-checkbox (ionChange)="toggleDomicileCheckbox()" ></ion-checkbox>
+            <ion-checkbox (ionChange)="toggleDomicileCheckbox()"></ion-checkbox>
             <span style="margin-right: 1em"></span>
             <ion-label>Specificare Domicilio</ion-label>
           </ion-item>
-          
+
           <!--Domicilio/Dimora-->
           <ion-item-group *ngIf="domicileChecked" class="domicile">
             <ion-item-divider>
@@ -114,20 +112,25 @@
               <ion-label position="floating">Regione</ion-label>
               <ion-select [formControl]="residenceDomicileFormGroup.controls['domicileRegion']" interface="action-sheet"
                           (ionFocus)="clearProvMunFields('domicile')" (ionChange)="getProvince('domicile')">
-                <ion-select-option *ngFor="let region of regions" value="{{region.id_regione}}">{{region.regione}}</ion-select-option>
+                <ion-select-option *ngFor="let region of regions"
+                                   value="{{region.id_regione}}">{{region.regione}}</ion-select-option>
               </ion-select>
             </ion-item>
             <ion-item [disabled]="!getGeographicalControl('domicileRegion').valid">
               <ion-label position="floating">Provincia</ion-label>
-              <ion-select [formControl]="residenceDomicileFormGroup.controls['domicileProvince']" interface="action-sheet"
+              <ion-select [formControl]="residenceDomicileFormGroup.controls['domicileProvince']"
+                          interface="action-sheet"
                           (ionFocus)="clearMunFields('domicile')" (ionChange)="getMunicipalities('domicile')">
-                <ion-select-option *ngFor="let province of domicileProvinces" value="{{province.sigla}}">{{province.provincia}}</ion-select-option>
+                <ion-select-option *ngFor="let province of domicileProvinces"
+                                   value="{{province.sigla}}">{{province.provincia}}</ion-select-option>
               </ion-select>
             </ion-item>
             <ion-item [disabled]="!getGeographicalControl('domicileProvince').valid">
               <ion-label position="floating">Città</ion-label>
-              <ion-select [formControl]="residenceDomicileFormGroup.controls['domicileMunicipality']" interface="action-sheet">
-                <ion-select-option *ngFor="let municipality of domicileMunicipalities" value="{{municipality.comune}}">{{municipality.comune}}</ion-select-option>
+              <ion-select [formControl]="residenceDomicileFormGroup.controls['domicileMunicipality']"
+                          interface="action-sheet">
+                <ion-select-option *ngFor="let municipality of domicileMunicipalities"
+                                   value="{{municipality.comune}}">{{municipality.comune}}</ion-select-option>
               </ion-select>
             </ion-item>
             <ion-item>
