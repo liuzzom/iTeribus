@@ -12,8 +12,8 @@ const routes: Routes = [
     pathMatch: 'full'
   },
   {
-    path: 'user-info-form',
-    loadChildren: () => import('./user-info-form/user-info-form.module').then(m => m.UserInfoFormPageModule)
+    path: 'new-user',
+    loadChildren: () => import('./new-user/new-user.module').then(m => m.NewUserPageModule)
   },
   {
     path: 'user-info',

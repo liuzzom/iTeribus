@@ -35,7 +35,7 @@ export class HomePage implements OnInit {
 
     if (!this.user) {
       // There is no user information...redirect to the user registration form
-      this.router.navigate(['./user-info-form']);
+      this.router.navigate(['./new-user']);
     }
 
     // Get movements from storage using the service
@@ -88,7 +88,7 @@ export class HomePage implements OnInit {
       duration: 2000
     });
     toast.present();
-    this.router.navigate(['/user-info-form']);
+    this.router.navigate(['/new-user']);
   }
 
   generatePDF(movement) {

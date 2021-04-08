@@ -40,7 +40,7 @@ export class NewMovementPage implements OnInit {
 
     if (!this.user) {
       // There is no user data. redirect to registration form
-      await this.router.navigate(['./user-info-form']);
+      await this.router.navigate(['./new-user']);
     }
   }
 

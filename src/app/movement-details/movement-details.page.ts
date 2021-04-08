@@ -41,7 +41,7 @@ export class MovementDetailsPage implements OnInit {
 
     if (!this.user) {
       // There is no user data. redirect to registration form
-      this.router.navigate(['./user-info-form']);
+      this.router.navigate(['./new-user']);
     }
 
     // Set the mode

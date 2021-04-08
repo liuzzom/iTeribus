@@ -4,6 +4,7 @@ export class User{
     name: string;
     surname: string;
     dateOfBirth: Date;
+    birthPlace?: Place;
     phoneNumber: string;
     email: string;
     document: Document;

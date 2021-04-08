@@ -1,24 +1,24 @@
-import { MovementReason } from './../../domain-model/MovementReason';
-import { User } from './../../domain-model/User';
-import { Movement } from './../../domain-model/Movement';
-import { Place } from './../../domain-model/Place';
-import { StorageService } from './../services/storage.service';
-import { Component, OnInit } from '@angular/core';
-import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { GeoService } from '../services/geo.service';
-import { Region } from '../../domain-model/Region';
-import { Province } from '../../domain-model/Province';
-import { Municipality } from '../../domain-model/Municipality';
-import { ToastController } from '@ionic/angular';
-import { Router } from '@angular/router';
-import { Document } from 'src/domain-model/Document';
+import {MovementReason} from './../../domain-model/MovementReason';
+import {User} from './../../domain-model/User';
+import {Movement} from './../../domain-model/Movement';
+import {Place} from './../../domain-model/Place';
+import {StorageService} from './../services/storage.service';
+import {Component, OnInit} from '@angular/core';
+import {AbstractControl, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {GeoService} from '../services/geo.service';
+import {Region} from '../../domain-model/Region';
+import {Province} from '../../domain-model/Province';
+import {Municipality} from '../../domain-model/Municipality';
+import {ToastController} from '@ionic/angular';
+import {Router} from '@angular/router';
+import {Document} from 'src/domain-model/Document';
 
 @Component({
   selector: 'app-user-info-form',
-  templateUrl: './user-info-form.page.html',
-  styleUrls: ['./user-info-form.page.scss'],
+  templateUrl: './new-user.page.html',
+  styleUrls: ['./new-user.page.scss'],
 })
-export class UserInfoFormPage implements OnInit {
+export class NewUserPage implements OnInit {
   private readonly addressPattern = '^[A-Za-z][a-zàèéìòù]* ([A-Z-a-zàèéìòù]+\\.?)*\\ ?([A-Za-z][a-zàèéìòù]*)? ?([A-Za-zàèéìòù]*)+ (\\d+(\\/?[A-Z[a-z]+)?)';
 
   anagraphicFormGroup: FormGroup;
@@ -28,12 +28,15 @@ export class UserInfoFormPage implements OnInit {
 
   regions: Region[];
 
+  // ----- Birth Place ----- \\
+  birthProvinces: Province[] = [];
+  birthMunicipalities: Municipality[] = [];
+
   // ----- Residence ----- \\
   residenceProvinces: Province[] = [];
   residenceMunicipalities: Municipality[] = [];
 
   // ----- Domicile ----- \\
-
   domicileChecked: boolean;
 
   domicileProvinces: Province[] = [];
@@ -46,7 +49,8 @@ export class UserInfoFormPage implements OnInit {
     private router: Router,
     private storageService: StorageService,
     public toastController: ToastController
-  ) { }
+  ) {
+  }
 
   async ngOnInit() {
     this.domicileChecked = false;
@@ -56,6 +60,9 @@ export class UserInfoFormPage implements OnInit {
       name: new FormControl('Antonino Mauro', [Validators.required, Validators.pattern('^[A-Z][a-z]*(\ ([A-Z][a-z]*)?)*')]),
       surname: new FormControl('Liuzzo', [Validators.required, Validators.pattern('^[A-Z][a-z]*(\ ([A-Z][a-z]*)?)*')]),
       dateOfBirth: new FormControl('1996-12-02', [Validators.required]),
+      birthRegion: new FormControl('', [Validators.required]),
+      birthProvince: new FormControl('', [Validators.required]),
+      birthMunicipality: new FormControl('', [Validators.required]),
       phoneNumber: new FormControl('3489534151', [Validators.required, Validators.pattern('^\\+?[0-9\ ]*')]),
       email: new FormControl('mauro.liuzzo@gmail.com', Validators.email)
     });
@@ -150,6 +157,11 @@ export class UserInfoFormPage implements OnInit {
       this.geoService.getProvinces().subscribe(provinces => {
         this.domicileProvinces = provinces.filter(province => province.id_regione === this.getGeographicalControl('domicileRegion').value);
       });
+    } else if (mode === 'birth') {
+      this.birthProvinces = [];
+      this.geoService.getProvinces().subscribe(provinces => {
+        this.birthProvinces = provinces.filter(province => province.id_regione === this.anagraphicFormGroup.get('birthRegion').value);
+      });
     } else {
       console.error('no supported mode');
     }
@@ -166,6 +178,11 @@ export class UserInfoFormPage implements OnInit {
       this.geoService.getMunicipalities().subscribe(municipalities => {
         this.domicileMunicipalities = municipalities.filter(municipality => municipality.provincia === this.getGeographicalControl('domicileProvince').value);
       });
+    } else if (mode === 'birth') {
+      this.birthMunicipalities = [];
+      this.geoService.getMunicipalities().subscribe(municipalities => {
+        this.birthMunicipalities = municipalities.filter(municipality => municipality.provincia === this.anagraphicFormGroup.get('birthProvince').value);
+      });
     } else {
       console.error('no supported mode');
     }
@@ -178,6 +195,9 @@ export class UserInfoFormPage implements OnInit {
     } else if (mode === 'domicile') {
       this.setGeographicalControl('domicileProvince', '');
       this.setGeographicalControl('domicileMunicipality', '');
+    } else if (mode === 'birth') {
+      this.anagraphicFormGroup.get('birthProvince').setValue('');
+      this.anagraphicFormGroup.get('birthMunicipality').setValue('');
     } else {
       console.error('no supported mode');
     }
@@ -189,6 +209,8 @@ export class UserInfoFormPage implements OnInit {
       this.setGeographicalControl('residenceMunicipality', '');
     } else if (mode === 'domicile') {
       this.setGeographicalControl('domicileMunicipality', '');
+    } else if (mode === 'birth') {
+      this.anagraphicFormGroup.get('birthMunicipality').setValue('');
     } else {
       console.error('no supported mode');
     }
@@ -209,6 +231,12 @@ export class UserInfoFormPage implements OnInit {
       name: name,
       surname: surname,
       dateOfBirth: this.anagraphicFormGroup.get('dateOfBirth').value,
+      birthPlace: new Place(
+        this.anagraphicFormGroup.get('birthRegion').value,
+        this.anagraphicFormGroup.get('birthProvince').value,
+        this.anagraphicFormGroup.get('birthMunicipality').value,
+        null
+      ),
       phoneNumber: this.anagraphicFormGroup.get('phoneNumber').value.replaceAll(' ', ''),
       email: this.anagraphicFormGroup.get('email').value,
       document: new Document(
@@ -281,7 +309,6 @@ export class UserInfoFormPage implements OnInit {
     }
 
 
-
     this.storageService.set('user', userData).then(() => this.successToast()).catch(() => this.unsuccessToast());
   }
 
@@ -304,7 +331,7 @@ export class UserInfoFormPage implements OnInit {
       duration: 2000
     });
     toast.present();
-    this.router.navigate(['/user-info-form']);
+    this.router.navigate(['/new-user']);
   }
 
 }

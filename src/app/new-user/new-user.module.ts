@@ -4,9 +4,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-import { UserInfoFormPageRoutingModule } from './user-info-form-routing.module';
+import { UserInfoFormPageRoutingModule } from './new-user-routing.module';
 
-import { UserInfoFormPage } from './user-info-form.page';
+import { NewUserPage } from './new-user.page';
 
 import {MatStepperModule} from '@angular/material/stepper';
 
@@ -19,6 +19,6 @@ import {MatStepperModule} from '@angular/material/stepper';
     MatStepperModule,
     UserInfoFormPageRoutingModule
   ],
-  declarations: [UserInfoFormPage]
+  declarations: [NewUserPage]
 })
-export class UserInfoFormPageModule {}
+export class NewUserPageModule {}

@@ -1,16 +1,16 @@
-import { User } from '../../domain-model/User';
-import { StorageService } from '../services/storage.service';
-import { Component, OnInit } from '@angular/core';
-import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { GeoService } from '../services/geo.service';
-import { Region } from '../../domain-model/Region';
-import { Province } from '../../domain-model/Province';
-import { Municipality } from '../../domain-model/Municipality';
-import { ToastController } from '@ionic/angular';
-import { Router, ActivatedRoute } from '@angular/router';
-import { Observable } from "rxjs";
-import { Document } from "../../domain-model/Document";
-import { Place } from "../../domain-model/Place";
+import {User} from '../../domain-model/User';
+import {StorageService} from '../services/storage.service';
+import {Component, OnInit} from '@angular/core';
+import {AbstractControl, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {GeoService} from '../services/geo.service';
+import {Region} from '../../domain-model/Region';
+import {Province} from '../../domain-model/Province';
+import {Municipality} from '../../domain-model/Municipality';
+import {ToastController} from '@ionic/angular';
+import {Router, ActivatedRoute} from '@angular/router';
+import {Observable} from "rxjs";
+import {Document} from "../../domain-model/Document";
+import {Place} from "../../domain-model/Place";
 
 @Component({
   selector: 'app-user-info',
@@ -31,6 +31,10 @@ export class UserInfoPage implements OnInit {
 
   regions: Region[];
 
+  // ----- Birth Place ----- \\
+  birthProvinces: Province[] = [];
+  birthMunicipalities: Municipality[] = [];
+
   // ----- Residence ----- \\
   residenceProvinces: Province[] = [];
   residenceMunicipalities: Municipality[] = [];
@@ -50,7 +54,8 @@ export class UserInfoPage implements OnInit {
     private router: Router,
     private storageService: StorageService,
     public toastController: ToastController
-  ) { }
+  ) {
+  }
 
 
   // ----- Initialization Section ----- \\
@@ -64,7 +69,7 @@ export class UserInfoPage implements OnInit {
 
     if (!this.user) {
       // There is no user data. redirect to registration form
-      this.router.navigate(['./user-info-form']);
+      this.router.navigate(['./new-user']);
     }
 
     // Set the mode basing on url
@@ -85,6 +90,9 @@ export class UserInfoPage implements OnInit {
       name: new FormControl('', [Validators.required, Validators.pattern('^[A-Z][a-z]*(\ ([A-Z][a-z]*)?)*')]),
       surname: new FormControl('', [Validators.required, Validators.pattern('^[A-Z][a-z]*(\ ([A-Z][a-z]*)?)*')]),
       dateOfBirth: new FormControl('', [Validators.required]),
+      birthRegion: new FormControl('', [Validators.required]),
+      birthProvince: new FormControl('', [Validators.required]),
+      birthMunicipality: new FormControl('', [Validators.required]),
       phoneNumber: new FormControl('', [Validators.required, Validators.pattern('^\\+?[0-9\ ]*')]),
       email: new FormControl('', Validators.email)
     });
@@ -116,6 +124,17 @@ export class UserInfoPage implements OnInit {
     this.anagraphicFormGroup.get('name').setValue(this.user.name);
     this.anagraphicFormGroup.get('surname').setValue(this.user.surname);
     this.anagraphicFormGroup.get('dateOfBirth').setValue(this.user.dateOfBirth);
+    this.anagraphicFormGroup.get('birthRegion').setValue(this.user.birthPlace.region);
+    this.getProvinceObservable('birth').subscribe(provinces => {
+      // Filter is used to avoid performance drops
+      this.birthProvinces = provinces.filter(province => province.id_regione === this.anagraphicFormGroup.get('birthRegion').value);
+      this.anagraphicFormGroup.get('birthProvince').setValue(this.user.birthPlace.province);
+
+      this.getMunicipalitiesObservable('birth').subscribe((municipalities) => {
+        this.birthMunicipalities = municipalities.filter(municipality => municipality.provincia === this.anagraphicFormGroup.get('birthProvince').value);
+        this.anagraphicFormGroup.get('birthMunicipality').setValue(this.user.birthPlace.municipality);
+      });
+    });
     this.anagraphicFormGroup.get('phoneNumber').setValue(this.user.phoneNumber);
     this.anagraphicFormGroup.get('email').setValue(this.user.email);
 
@@ -129,13 +148,11 @@ export class UserInfoPage implements OnInit {
     this.residenceDomicileFormGroup.get('residenceRegion').setValue(this.user.residence.region);
     this.getProvinceObservable('residence').subscribe(provinces => {
       // Filter is used to avoid performance drops
-      this.residenceProvinces = provinces.
-        filter(province => province.id_regione === this.getGeographicalControl('residenceRegion').value);
+      this.residenceProvinces = provinces.filter(province => province.id_regione === this.getGeographicalControl('residenceRegion').value);
       this.residenceDomicileFormGroup.get('residenceProvince').setValue(this.user.residence.province);
 
       this.getMunicipalitiesObservable('residence').subscribe((municipalities) => {
-        this.residenceMunicipalities = municipalities.
-          filter(municipality => municipality.provincia === this.getGeographicalControl('residenceProvince').value);
+        this.residenceMunicipalities = municipalities.filter(municipality => municipality.provincia === this.getGeographicalControl('residenceProvince').value);
         this.residenceDomicileFormGroup.get('residenceMunicipality').setValue(this.user.residence.municipality);
       });
     });
@@ -154,8 +171,7 @@ export class UserInfoPage implements OnInit {
       this.residenceDomicileFormGroup.get('domicileRegion').setValue(this.user.domicile.region);
       this.getProvinceObservable('domicile').subscribe(provinces => {
         // Filter is used to avoid performance drop
-        this.domicileProvinces = provinces.
-          filter(province => province.id_regione === this.getGeographicalControl('domicileRegion').value);
+        this.domicileProvinces = provinces.filter(province => province.id_regione === this.getGeographicalControl('domicileRegion').value);
         this.residenceDomicileFormGroup.get('domicileProvince').setValue(this.user.domicile.province);
 
         this.getMunicipalitiesObservable('domicile').subscribe(municipalities => {
@@ -174,7 +190,7 @@ export class UserInfoPage implements OnInit {
   }
 
   undo() {
-    if(this.activatedRoute.snapshot.paramMap.get('mode') === 'edit'){
+    if (this.activatedRoute.snapshot.paramMap.get('mode') === 'edit') {
       this.router.navigate(['/home']);
     }
     this.fillForm();
@@ -226,6 +242,9 @@ export class UserInfoPage implements OnInit {
     } else if (mode === 'domicile') {
       this.domicileProvinces = [];
       return this.geoService.getProvinces();
+    } else if (mode === 'birth') {
+      this.birthProvinces = [];
+      return this.geoService.getProvinces();
     } else {
       console.error('no supported mode');
       return null;
@@ -244,6 +263,11 @@ export class UserInfoPage implements OnInit {
       this.geoService.getProvinces().subscribe(provinces => {
         this.domicileProvinces = provinces.filter(province => province.id_regione === this.getGeographicalControl('domicileRegion').value);
       });
+    } else if (mode === 'birth') {
+      this.birthProvinces = [];
+      this.geoService.getProvinces().subscribe(provinces => {
+        this.birthProvinces = provinces.filter(province => province.id_regione === this.anagraphicFormGroup.get('birthRegion').value);
+      });
     } else {
       console.error('no supported mode');
     }
@@ -255,6 +279,9 @@ export class UserInfoPage implements OnInit {
       return this.geoService.getMunicipalities();
     } else if (mode === 'domicile') {
       this.domicileMunicipalities = [];
+      return this.geoService.getMunicipalities();
+    } else if (mode === 'birth') {
+      this.birthMunicipalities = [];
       return this.geoService.getMunicipalities();
     } else {
       console.error('no supported mode');
@@ -273,6 +300,11 @@ export class UserInfoPage implements OnInit {
       this.geoService.getMunicipalities().subscribe(municipalities => {
         this.domicileMunicipalities = municipalities.filter(municipality => municipality.provincia === this.getGeographicalControl('domicileProvince').value);
       });
+    } else if (mode === 'birth') {
+      this.birthMunicipalities = [];
+      this.geoService.getMunicipalities().subscribe(municipalities => {
+        this.birthMunicipalities = municipalities.filter(municipality => municipality.provincia === this.anagraphicFormGroup.get('birthProvince').value);
+      });
     } else {
       console.error('no supported mode');
     }
@@ -285,6 +317,9 @@ export class UserInfoPage implements OnInit {
     } else if (mode === 'domicile') {
       this.setGeographicalControl('domicileProvince', '');
       this.setGeographicalControl('domicileMunicipality', '');
+    } else if (mode === 'birth') {
+      this.anagraphicFormGroup.get('birthProvince').setValue('');
+      this.anagraphicFormGroup.get('birthMunicipality').setValue('');
     } else {
       console.error('no supported mode');
     }
@@ -296,6 +331,8 @@ export class UserInfoPage implements OnInit {
       this.setGeographicalControl('residenceMunicipality', '');
     } else if (mode === 'domicile') {
       this.setGeographicalControl('domicileMunicipality', '');
+    } else if (mode === 'birth') {
+      this.anagraphicFormGroup.get('birthMunicipality').setValue('');
     } else {
       console.error('no supported mode');
     }
@@ -310,7 +347,7 @@ export class UserInfoPage implements OnInit {
   editUserInfo() {
     // Check if all the forms are valid
     this.valid = this.anagraphicFormGroup.valid && this.documentFormGroup.valid && this.residenceDomicileFormGroup.valid;
-    if(!this.valid){
+    if (!this.valid) {
       this.unsuccessToast('Errore! Controlla i dati inseriti e riprova');
       return;
     }
@@ -322,6 +359,12 @@ export class UserInfoPage implements OnInit {
       name: name,
       surname: surname,
       dateOfBirth: this.anagraphicFormGroup.get('dateOfBirth').value,
+      birthPlace: new Place(
+        this.anagraphicFormGroup.get('birthRegion').value,
+        this.anagraphicFormGroup.get('birthProvince').value,
+        this.anagraphicFormGroup.get('birthMunicipality').value,
+        null
+      ),
       phoneNumber: this.anagraphicFormGroup.get('phoneNumber').value.replaceAll(' ', ''),
       email: this.anagraphicFormGroup.get('email').value,
       document: new Document(

@@ -127,11 +127,11 @@ export class PdfGeneratorService {
     undersignedField.setText(`\t${user.name} ${user.surname}`);
 
     const birthDate = user.dateOfBirth.toString().split('-')
-    birthDayField.setText(birthDate[2]);
+    birthDayField.setText(birthDate[2].split('T')[0]);
     birthMonthField.setText(birthDate[1]);
     birthYearField.setText(birthDate[0]);
-    birthPlaceField.setText('TODO');
-    birthProvinceField.setText('TD');
+    birthPlaceField.setText(user.birthPlace.municipality);
+    birthProvinceField.setText(user.birthPlace.province);
 
     residentField.setText(user.residence.municipality);
     residentProvinceField.setText(user.residence.province);
@@ -146,7 +146,7 @@ export class PdfGeneratorService {
     documentReleasedByField.setText(user.document.issuingAuthority);
 
     const documentReleaseDate = user.document.issueDate.toString().split('-');
-    documentDayField.setText(documentReleaseDate[2]);
+    documentDayField.setText(documentReleaseDate[2].split('T')[0]);
     documentMonthField.setText(documentReleaseDate[1]);
     documentYearField.setText(documentReleaseDate[0]);
 
@@ -162,7 +162,7 @@ export class PdfGeneratorService {
     tripStartPointField.setText(movement.departure);
     tripEndPointField.setText(movement.destination);
     declarationsField.setText(movement.notes);
-    dateAndPlaceField.setText('TO DO');
+    dateAndPlaceField.setText('TO DO'); // TODO: gestire il caso di generazione con o senza data
     reasonsRadioGroup.select(this.getReason(movement.reason));
 
     // Serialize the PDFDocument to bytes (a Uint8Array)

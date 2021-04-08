@@ -18,6 +18,38 @@
               <ion-datetime [disabled]="!editMode" formControlName="dateOfBirth"
                             displayFormat="DD MM YYYY"></ion-datetime>
             </ion-item>
+            <!-- Birth Place -->
+            <ion-item-group>
+              <ion-item-divider>
+                <ion-label>Luogo di Nascita</ion-label>
+              </ion-item-divider>
+              <ion-item [disabled]="!editMode">
+                <ion-label position="stacked">Regione</ion-label>
+                <ion-select formControlName="birthRegion"
+                            interface="action-sheet"
+                            (ionFocus)="clearProvMunFields('birth')" (ionChange)="getProvince('birth')">
+                  <ion-select-option *ngFor="let region of regions"
+                                     value="{{region.id_regione}}">{{region.regione}}</ion-select-option>
+                </ion-select>
+              </ion-item>
+              <ion-item [disabled]="!editMode || !anagraphicFormGroup.get('birthRegion').valid">
+                <ion-label position="stacked">Provincia</ion-label>
+                <ion-select formControlName="birthProvince"
+                            interface="action-sheet"
+                            (ionFocus)="clearMunFields('birth')" (ionChange)="getMunicipalities('birth')">
+                  <ion-select-option *ngFor="let province of birthProvinces"
+                                     value="{{province.sigla}}">{{province.provincia}}</ion-select-option>
+                </ion-select>
+              </ion-item>
+              <ion-item [disabled]="!editMode || !anagraphicFormGroup.get('birthProvince').valid">
+                <ion-label position="stacked">Città</ion-label>
+                <ion-select formControlName="birthMunicipality"
+                            interface="action-sheet">
+                  <ion-select-option *ngFor="let municipality of birthMunicipalities"
+                                     value="{{municipality.comune}}">{{municipality.comune}}</ion-select-option>
+                </ion-select>
+              </ion-item>
+            </ion-item-group>
             <ion-item>
               <ion-label position="floating">Telefono</ion-label>
               <ion-input [disabled]="!editMode" formControlName="phoneNumber" inputmode="tel"></ion-input>
