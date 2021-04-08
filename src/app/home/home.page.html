@@ -15,7 +15,7 @@
             <ion-fab-button size="small" href="./movement-details/{{movement.name}}/edit">
               <ion-icon name="create-outline"></ion-icon>
             </ion-fab-button>
-            <ion-fab-button size="small" color="secondary">
+            <ion-fab-button size="small" color="secondary" (click)="generatePDF(movement)">
               <ion-icon name="print-outline"></ion-icon>
             </ion-fab-button>
             <!-- Delete Button -->

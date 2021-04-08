@@ -3,6 +3,8 @@ import { Movement } from './../../domain-model/Movement';
 import { StorageService } from './../services/storage.service';
 import { Component, Input, OnInit } from '@angular/core';
 import { AlertController, ToastController } from '@ionic/angular';
+import {PdfGeneratorService} from "../services/pdf-generator.service";
+import {User} from "../../domain-model/User";
 
 @Component({
   selector: 'app-home',
@@ -11,13 +13,15 @@ import { AlertController, ToastController } from '@ionic/angular';
 })
 export class HomePage implements OnInit {
 
-  @Input() movements: Movement[];
+  movements: Movement[];
+  user: User
 
   constructor(
     private activatedRoute: ActivatedRoute,
     private alertController: AlertController,
     private router: Router,
     private storageService: StorageService,
+    private pdfGeneratorService: PdfGeneratorService,
     private toastController: ToastController
   ) {
     this.activatedRoute.params.subscribe(val => {
@@ -27,9 +31,9 @@ export class HomePage implements OnInit {
 
   async ngOnInit() {
     // Check if the storage contains user information
-    const user = await this.storageService.get('user');
+    this.user = await this.storageService.get('user');
 
-    if (!user) {
+    if (!this.user) {
       // There is no user information...redirect to the user registration form
       this.router.navigate(['./user-info-form']);
     }
@@ -87,4 +91,8 @@ export class HomePage implements OnInit {
     this.router.navigate(['/user-info-form']);
   }
 
+  generatePDF(movement) {
+    console.log('generation....')
+    this.pdfGeneratorService.fillForm(this.user, movement).then(() => console.log('Form generated'));
+  }
 }
