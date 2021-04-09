@@ -1,6 +1,5 @@
 <ion-content>
   <div id="container">
-
     <mat-vertical-stepper #userStepper linear>
       <mat-step label="Dati Anagrafici" [stepControl]="anagraphicFormGroup">
         <form [formGroup]="anagraphicFormGroup">
@@ -208,8 +207,6 @@
         <ion-icon name="save-outline"></ion-icon>
       </ion-fab-button>
     </ion-fab>
-
   </div>
-
-
+  <ion-icon name="arrow-undo-outline" style="display: none;"></ion-icon>
 </ion-content>
