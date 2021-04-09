@@ -99,7 +99,7 @@
             </ion-item-divider>
             <ion-item>
               <ion-label position="stacked">Regione</ion-label>
-              <ion-select [disabled]="!editMode" [formControl]="residenceDomicileFormGroup.controls['residenceRegion']"
+              <ion-select [disabled]="!editMode" formControlName="residenceRegion"
                           interface="action-sheet"
                           (ionFocus)="clearProvMunFields('residence')" (ionChange)="getProvince('residence')">
                 <ion-select-option *ngFor="let region of regions"
@@ -108,7 +108,7 @@
             </ion-item>
             <ion-item [disabled]="!editMode || !getGeographicalControl('residenceRegion').valid">
               <ion-label position="stacked">Provincia</ion-label>
-              <ion-select [formControl]="residenceDomicileFormGroup.controls['residenceProvince']"
+              <ion-select formControlName="residenceProvince"
                           interface="action-sheet"
                           (ionFocus)="clearMunFields('residence')" (ionChange)="getMunicipalities('residence')">
                 <ion-select-option *ngFor="let province of residenceProvinces"
@@ -117,7 +117,7 @@
             </ion-item>
             <ion-item [disabled]="!editMode || !getGeographicalControl('residenceProvince').valid">
               <ion-label position="stacked">Città</ion-label>
-              <ion-select [formControl]="residenceDomicileFormGroup.controls['residenceMunicipality']"
+              <ion-select formControlName="residenceMunicipality"
                           interface="action-sheet">
                 <ion-select-option *ngFor="let municipality of residenceMunicipalities"
                                    value="{{municipality.comune}}">{{municipality.comune}}</ion-select-option>
@@ -125,8 +125,7 @@
             </ion-item>
             <ion-item>
               <ion-label position="floating">Indirizzo</ion-label>
-              <ion-input [disabled]="!editMode"
-                         [formControl]="residenceDomicileFormGroup.controls['residenceAddress']"></ion-input>
+              <ion-input [disabled]="!editMode" formControlName="residenceAddress"></ion-input>
             </ion-item>
           </ion-item-group>
 
@@ -143,7 +142,7 @@
             </ion-item-divider>
             <ion-item>
               <ion-label position="stacked">Regione</ion-label>
-              <ion-select [disabled]="!editMode" [formControl]="residenceDomicileFormGroup.controls['domicileRegion']"
+              <ion-select [disabled]="!editMode" formControlName="domicileRegion"
                           interface="action-sheet"
                           (ionFocus)="clearProvMunFields('domicile')" (ionChange)="getProvince('domicile')">
                 <ion-select-option *ngFor="let region of regions"
@@ -152,7 +151,7 @@
             </ion-item>
             <ion-item [disabled]="!editMode || !getGeographicalControl('domicileRegion').valid">
               <ion-label position="stacked">Provincia</ion-label>
-              <ion-select [formControl]="residenceDomicileFormGroup.controls['domicileProvince']"
+              <ion-select formControlName="domicileProvince"
                           interface="action-sheet"
                           (ionFocus)="clearMunFields('domicile')" (ionChange)="getMunicipalities('domicile')">
                 <ion-select-option *ngFor="let province of domicileProvinces"
@@ -161,7 +160,7 @@
             </ion-item>
             <ion-item [disabled]="!editMode || !getGeographicalControl('domicileProvince').valid">
               <ion-label position="stacked">Città</ion-label>
-              <ion-select [formControl]="residenceDomicileFormGroup.controls['domicileMunicipality']"
+              <ion-select formControlName="domicileMunicipality"
                           interface="action-sheet">
                 <ion-select-option *ngFor="let municipality of domicileMunicipalities"
                                    value="{{municipality.comune}}">{{municipality.comune}}</ion-select-option>
@@ -169,7 +168,7 @@
             </ion-item>
             <ion-item [disabled]="!editMode">
               <ion-label position="floating">Indirizzo</ion-label>
-              <ion-input [formControl]="residenceDomicileFormGroup.controls['domicileAddress']"></ion-input>
+              <ion-input formControlName="domicileAddress"></ion-input>
             </ion-item>
           </ion-item-group>
         </form>
