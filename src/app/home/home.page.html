@@ -1,5 +1,16 @@
 <ion-content class="ion-padding" [fullscreen]="true">
+  <ion-progress-bar type="indeterminate"></ion-progress-bar>
+  <div id="no-movements" *ngIf="showNoMovementsMsg">
+    <h3 *ngIf="showNoMovementsMsg">
+      <em>Nessuno spostamento inserito.</em><br>
+      <em>Premi </em>
+      <ion-icon name="add-circle-outline"></ion-icon>
+      <em> per inserirne uno!</em><br>
+      <img src="assets/icon/jt_gif.gif" alt="">
+    </h3>
+  </div>
   <ion-list>
+    <ion-progress-bar *ngIf="movements.length === 0 && !showNoMovementsMsg" type="indeterminate" color="tertiary"></ion-progress-bar>
     <ion-item *ngFor="let movement of movements; let i = index">
       <ion-card style="width: 100%;">
         <a href="./movement-details/{{movement.name}}/view">
@@ -15,11 +26,11 @@
             <ion-fab-button size="small" href="./movement-details/{{movement.name}}/edit">
               <ion-icon name="create-outline"></ion-icon>
             </ion-fab-button>
-            <ion-fab-button size="small" color="secondary" (click)="generatePDF(movement)">
+            <ion-fab-button size="small" color="secondary" (click)="showGenerateAlert(i)">
               <ion-icon name="print-outline"></ion-icon>
             </ion-fab-button>
             <!-- Delete Button -->
-            <ion-fab-button size="small" color="danger" (click)="showAlert(i)">
+            <ion-fab-button size="small" color="danger" (click)="showDeleteAlert(i)">
               <ion-icon name="trash-outline"></ion-icon>
             </ion-fab-button>
           </div>

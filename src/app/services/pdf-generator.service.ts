@@ -4,41 +4,19 @@ import {HttpClient} from "@angular/common/http";
 import {saveAs} from 'file-saver';
 import {User} from "../../domain-model/User";
 import {Movement} from "../../domain-model/Movement";
+import {DatePipe} from "@angular/common";
 
 @Injectable({
   providedIn: 'root'
 })
 export class PdfGeneratorService {
-  formFields = [];
   private form: PDFForm;
   private pdfDoc: PDFDocument;
 
   constructor(
-    private httpClient: HttpClient
+    private httpClient: HttpClient,
+    private datePipe: DatePipe
   ) { }
-
-  async loadForm(){
-
-    // Form Url and get it as byte buffer
-    const formUrl = 'assets/modello_vuoto.pdf';
-    const formPdfBytes = await this.httpClient.get(formUrl, {responseType: "arraybuffer"}).toPromise();
-
-    // Load a PDF with form fields
-    this.pdfDoc = await PDFDocument.load(formPdfBytes);
-
-    // Get the form containing all the fields
-    this.form = this.pdfDoc.getForm();
-
-    // Initialize the fields array
-    const fields = this.form.getFields()
-    fields.forEach(field => {
-      const type = field.constructor.name
-      const name = field.getName()
-      this.formFields.push({type: type, name: name});
-    });
-
-    console.log(this.formFields);
-  }
 
   private prettifyDocument(documentType: string): string{
     switch (documentType){
@@ -79,7 +57,20 @@ export class PdfGeneratorService {
     }
   }
 
-  async fillForm(user: User, movement: Movement){
+  private async loadForm(){
+
+    // Form Url and get it as byte buffer
+    const formUrl = 'assets/modello_vuoto.pdf';
+    const formPdfBytes = await this.httpClient.get(formUrl, {responseType: "arraybuffer"}).toPromise();
+
+    // Load a PDF with form fields
+    this.pdfDoc = await PDFDocument.load(formPdfBytes);
+
+    // Get the form containing all the fields
+    this.form = this.pdfDoc.getForm();
+  }
+
+  async fillForm(user: User, movement: Movement, date: boolean){
     console.log(user);
     console.log(movement);
 
@@ -162,7 +153,14 @@ export class PdfGeneratorService {
     tripStartPointField.setText(movement.departure);
     tripEndPointField.setText(movement.destination);
     declarationsField.setText(movement.notes);
-    dateAndPlaceField.setText('TO DO'); // TODO: gestire il caso di generazione con o senza data
+
+    if(date){
+      console.log(this.datePipe.transform(new Date(), 'dd/MM/YYYY'));
+      dateAndPlaceField.setText(this.datePipe.transform(new Date(), 'dd/MM/YYYY'));
+    } else {
+      dateAndPlaceField.setText('');
+    }
+
     reasonsRadioGroup.select(this.getReason(movement.reason));
 
     // Serialize the PDFDocument to bytes (a Uint8Array)

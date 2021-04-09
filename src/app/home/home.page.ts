@@ -12,8 +12,9 @@ import {User} from "../../domain-model/User";
   styleUrls: ['home.page.scss'],
 })
 export class HomePage implements OnInit {
+  showNoMovementsMsg: boolean = false;
 
-  movements: Movement[];
+  movements: Movement[] = [];
   user: User
 
   constructor(
@@ -40,12 +41,41 @@ export class HomePage implements OnInit {
 
     // Get movements from storage using the service
     this.movements = await this.storageService.getMovements();
+    this.showNoMovementsMsg = this.movements.length === 0;
   }
 
 
   // ----- Feedback Section ----- \\
+  async showGenerateAlert(index: number) {
+    const alert = await this.alertController.create({
+      header: 'Generare Modulo',
+      message: `Generare Modulo per <strong>${this.movements[index].name}</strong>?`,
+      buttons: [
+        {
+          text: 'SENZA DATA',
+          cssClass: 'secondary',
+          handler: () => {
+            this.generatePDF(this.movements[index], false)
+          }
+        },
+        {
+          text: 'PER OGGI',
+          handler: () => {
+            this.generatePDF(this.movements[index], true)
+          }
+        },
+        {
+          text: 'ANNULLA',
+          cssClass: 'danger',
+          role: 'cancel'
+        }
+      ]
+    });
 
-  async showAlert(index: number) {
+    await alert.present();
+  }
+
+  async showDeleteAlert(index: number) {
     const alert = await this.alertController.create({
       header: 'Elimina Spostamento',
       message: `Eliminare definitivamente <strong>${this.movements[index].name}</strong>?`,
@@ -91,8 +121,8 @@ export class HomePage implements OnInit {
     this.router.navigate(['/new-user']);
   }
 
-  generatePDF(movement) {
+  generatePDF(movement, date: boolean) {
     console.log('generation....')
-    this.pdfGeneratorService.fillForm(this.user, movement).then(() => console.log('Form generated'));
+    this.pdfGeneratorService.fillForm(this.user, movement, date).then(() => console.log('Form generated'));
   }
 }
