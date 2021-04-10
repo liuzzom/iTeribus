@@ -3,12 +3,12 @@ import { Movement } from './../../domain-model/Movement';
 import { StorageService } from './../services/storage.service';
 import { Component, Input, OnInit } from '@angular/core';
 import { AlertController, ToastController } from '@ionic/angular';
-import {PdfGeneratorService} from "../services/pdf-generator.service";
-import {User} from "../../domain-model/User";
+import { PdfGeneratorService } from "../services/pdf-generator.service";
+import { User } from "../../domain-model/User";
 
-import { Plugins } from '@capacitor/core';
+import { Plugins, FilesystemDirectory, FilesystemEncoding } from '@capacitor/core';
 
-const { Share } = Plugins;
+const { Filesystem, Share } = Plugins;
 
 @Component({
   selector: 'app-home',
@@ -92,9 +92,9 @@ export class HomePage implements OnInit {
           cssClass: 'danger',
           handler: () => {
             this.storageService.remove(this.movements[index].name)
-            .then(() => this.successDeletionToast()
-            .catch(() => this.unsuccessDeletionToast())
-            );
+              .then(() => this.successDeletionToast()
+                .catch(() => this.unsuccessDeletionToast())
+              );
             this.ngOnInit();
           }
         }
@@ -130,12 +130,63 @@ export class HomePage implements OnInit {
     this.pdfGeneratorService.fillForm(this.user, movement, date).then(() => console.log('Form generated'));
   }
 
-  async shareTest(){
+  /*----------------------------------------------------------------------------------*/
+
+  public async shareButton() {
+    const blob = await this.pdfGeneratorService.fillForm(this.user, this.movements[0], false);
+    const reader = new FileReader();
+    reader.readAsDataURL(blob);
+    reader.onloadend = () => {
+      let base64data = reader.result;
+      this.fileWrite('prova.pdf', base64data);
+    };
+  }
+
+  async debugToast(text: string) {
+    const toast = await this.toastController.create({
+      message: text,
+      duration: 2000
+    });
+    toast.present();
+  }
+
+  async shareTest(attachmentUri: string) {
     let shareRet = await Share.share({
       title: 'See cool stuff',
       text: 'Really awesome thing you need to see right meow',
-      url: 'http://ionicframework.com/',
+      url: attachmentUri,
       dialogTitle: 'Share with buddies'
     });
   }
+
+  async fileWrite(filename: string, pdfBase64) {
+    try {
+      const result = await Filesystem.writeFile({
+        path: filename,
+        data: pdfBase64,
+        directory: FilesystemDirectory.Documents
+      }).then(writeFileResult => {
+        console.log('File written');
+        Filesystem.getUri({
+          directory: FilesystemDirectory.Documents,
+          path: filename
+        }).then(uriResult => {
+          const path = uriResult.uri;
+          this.shareTest(path);
+        });
+      });
+      console.log('Wrote file', result);
+    } catch (e) {
+      console.error('Unable to write file', e);
+    }
+  }
+
+  async fileRead() {
+    let contents = await Filesystem.readFile({
+      path: 'file://storage/emulated/0/Download/Scuola.pdf'
+    });
+    this.debugToast(contents.data);
+    console.log(contents);
+  }
+
 }

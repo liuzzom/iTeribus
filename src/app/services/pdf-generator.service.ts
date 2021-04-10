@@ -70,7 +70,7 @@ export class PdfGeneratorService {
     this.form = this.pdfDoc.getForm();
   }
 
-  async fillForm(user: User, movement: Movement, date: boolean){
+  async fillForm(user: User, movement: Movement, date: boolean): Promise<Blob>{
     console.log(user);
     console.log(movement);
 
@@ -168,6 +168,7 @@ export class PdfGeneratorService {
 
     // Trigger the browser to download the PDF document
     const file = new Blob([pdfBytes], {type: 'application/pdf'});
-    saveAs(file, `${movement.name}.pdf`);
+    //saveAs(file, `${movement.name}.pdf`);
+    return file;
   }
 }

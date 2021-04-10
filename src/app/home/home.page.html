@@ -9,7 +9,7 @@
       <img src="assets/icon/jt_gif.gif" alt="">
     </h3>
   </div>
-  <ion-button color="danger" (click)="shareTest()">CLICK ME</ion-button>
+  <ion-button color="danger" (click)="shareButton()">CLICK ME</ion-button>
   <ion-list>
     <ion-progress-bar *ngIf="movements.length === 0 && !showNoMovementsMsg" type="indeterminate" color="tertiary"></ion-progress-bar>
     <ion-item *ngFor="let movement of movements; let i = index">
