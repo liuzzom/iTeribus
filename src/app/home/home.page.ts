@@ -1,10 +1,15 @@
+import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Movement } from './../../domain-model/Movement';
-import { StorageService } from './../services/storage.service';
-import { Component, Input, OnInit } from '@angular/core';
+import { Plugins } from '@capacitor/core';
 import { AlertController, ToastController } from '@ionic/angular';
-import {PdfGeneratorService} from "../services/pdf-generator.service";
-import {User} from "../../domain-model/User";
+
+import { PdfGeneratorService } from '../services/pdf-generator.service';
+import { StorageService } from './../services/storage.service';
+import { Movement } from './../../domain-model/Movement';
+
+import { User } from '../../domain-model/User';
+
+const { LocalNotifications } = Plugins;
 
 @Component({
   selector: 'app-home',
@@ -15,7 +20,7 @@ export class HomePage implements OnInit {
   showNoMovementsMsg: boolean = false;
 
   movements: Movement[] = [];
-  user: User
+  user: User;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -42,6 +47,26 @@ export class HomePage implements OnInit {
     // Get movements from storage using the service
     this.movements = await this.storageService.getMovements();
     this.showNoMovementsMsg = this.movements.length === 0;
+
+    await LocalNotifications.requestPermissions();
+  }
+
+  public async notify(){
+    const notifs = await LocalNotifications.schedule({
+      notifications: [
+        {
+          title: "Title",
+          body: "Body",
+          id: 1,
+          schedule: { at: new Date(Date.now() + 1000 * 5) },
+          sound: null,
+          attachments: null,
+          actionTypeId: "",
+          extra: null
+        }
+      ]
+    });
+    console.log('scheduled notifications', notifs);
   }
 
 

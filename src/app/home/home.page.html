@@ -10,6 +10,7 @@
     </h3>
   </div>
   <ion-list>
+    <ion-button color="danger" (click)="notify()"></ion-button>
     <ion-progress-bar *ngIf="movements.length === 0 && !showNoMovementsMsg" type="indeterminate" color="tertiary"></ion-progress-bar>
     <ion-item *ngFor="let movement of movements; let i = index">
       <ion-card style="width: 100%;">
