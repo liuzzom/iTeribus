@@ -6,6 +6,10 @@ import { AlertController, ToastController } from '@ionic/angular';
 import {PdfGeneratorService} from "../services/pdf-generator.service";
 import {User} from "../../domain-model/User";
 
+import { Plugins } from '@capacitor/core';
+
+const { Share } = Plugins;
+
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
@@ -124,5 +128,14 @@ export class HomePage implements OnInit {
   generatePDF(movement, date: boolean) {
     console.log('generation....')
     this.pdfGeneratorService.fillForm(this.user, movement, date).then(() => console.log('Form generated'));
+  }
+
+  async shareTest(){
+    let shareRet = await Share.share({
+      title: 'See cool stuff',
+      text: 'Really awesome thing you need to see right meow',
+      url: 'http://ionicframework.com/',
+      dialogTitle: 'Share with buddies'
+    });
   }
 }
