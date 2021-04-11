@@ -9,7 +9,7 @@ import { Movement } from './../../domain-model/Movement';
 
 import { User } from '../../domain-model/User';
 
-const { LocalNotifications } = Plugins;
+const { App, BackgroundTask, LocalNotifications } = Plugins;
 
 @Component({
   selector: 'app-home',
@@ -48,10 +48,69 @@ export class HomePage implements OnInit {
     this.movements = await this.storageService.getMovements();
     this.showNoMovementsMsg = this.movements.length === 0;
 
-    await LocalNotifications.requestPermissions();
+    //await LocalNotifications.requestPermission();
+
+    App.addListener('appStateChange', (state) => {
+
+      if (!state.isActive) {
+        // The app has become inactive. We should check if we have some work left to do, and, if so,
+        // execute a background task that will allow us to finish that work before the OS
+        // suspends or terminates our app:
+        let taskId = BackgroundTask.beforeExit(async () => {
+          // In this function We might finish an upload, let a network request
+          // finish, persist some data, or perform some other task
+
+          this.notifyWithServiceWorker();
+
+          // Must call in order to end our task otherwise
+          // we risk our app being terminated, and possibly
+          // being labeled as impacting battery life
+          BackgroundTask.finish({
+            taskId
+          });
+        });
+      }
+    })
+
   }
 
-  public async notify(){
+  public notifyWithServiceWorker() {
+    navigator.serviceWorker.register('ngsw-worker.js');
+
+    Notification.requestPermission(result => {
+      if (result === 'granted') {
+        setTimeout(() => {
+          navigator.serviceWorker.ready.then(registration => {
+            registration.showNotification('Vibration Sample', {
+              body: 'Buzz! Buzz!',
+              icon: '../images/touch/chrome-touch-icon-192x192.png',
+              vibrate: [200, 100, 200, 100, 200, 100, 200],
+              tag: 'vibration-sample'
+            });
+          });
+        }, 3000);
+      }
+    });
+  }
+
+  public notifyWithServiceWorkerInBackground() {
+    navigator.serviceWorker.register('ngsw-worker.js');
+
+    Notification.requestPermission(result => {
+      if (result === 'granted') {
+        navigator.serviceWorker.ready.then(registration => {
+          registration.showNotification('Vibration Sample', {
+            body: 'Buzz! Buzz!',
+            icon: '../images/touch/chrome-touch-icon-192x192.png',
+            vibrate: [200, 100, 200, 100, 200, 100, 200],
+            tag: 'vibration-sample'
+          });
+        });
+      }
+    });
+  }
+
+  public async notify() {
     const notifs = await LocalNotifications.schedule({
       notifications: [
         {
@@ -113,9 +172,9 @@ export class HomePage implements OnInit {
           cssClass: 'danger',
           handler: () => {
             this.storageService.remove(this.movements[index].name)
-            .then(() => this.successDeletionToast()
-            .catch(() => this.unsuccessDeletionToast())
-            );
+              .then(() => this.successDeletionToast()
+                .catch(() => this.unsuccessDeletionToast())
+              );
             this.ngOnInit();
           }
         }
