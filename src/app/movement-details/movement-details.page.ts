@@ -24,7 +24,7 @@ export class MovementDetailsPage implements OnInit {
   constructor(
     private activatedRoute: ActivatedRoute,
     private formBuilder: FormBuilder,
-    private platform: Platform,
+    public platform: Platform,
     private router: Router,
     private storageService: StorageService,
     public toastController: ToastController,
