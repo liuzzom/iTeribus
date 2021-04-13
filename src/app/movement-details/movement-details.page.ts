@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
-import { StorageService } from "../services/storage.service";
-import { ToastController } from "@ionic/angular";
-import { ActivatedRoute, Router } from "@angular/router";
-import { MovementReason } from "../../domain-model/MovementReason";
-import { Movement } from "../../domain-model/Movement";
-import { User } from "../../domain-model/User";
+import { StorageService } from '../services/storage.service';
+import { Platform, ToastController } from '@ionic/angular';
+import { ActivatedRoute, Router } from '@angular/router';
+import { MovementReason } from '../../domain-model/MovementReason';
+import { Movement } from '../../domain-model/Movement';
+import { User } from '../../domain-model/User';
 
 @Component({
   selector: 'app-movement-details',
@@ -22,11 +22,12 @@ export class MovementDetailsPage implements OnInit {
   repeatChecked: boolean;
 
   constructor(
+    private activatedRoute: ActivatedRoute,
     private formBuilder: FormBuilder,
+    private platform: Platform,
+    private router: Router,
     private storageService: StorageService,
     public toastController: ToastController,
-    private router: Router,
-    private activatedRoute: ActivatedRoute
   ) {
   }
 

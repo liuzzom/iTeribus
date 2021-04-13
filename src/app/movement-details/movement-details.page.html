@@ -45,14 +45,14 @@
         </ion-item>
       </ion-item-group>
       <!-- Generazione Automatica -->
-      <ion-item [disabled]="!editMode">
+      <ion-item *ngIf="!platform.is('ios')"[disabled]="!editMode">
         <ion-checkbox id="repeatCheckbox" (ionChange)="toggleRepeatCheckbox()"></ion-checkbox>
         <span style="margin-right: 1em"></span>
-        <ion-label>Ripeti</ion-label>
+        <ion-label>Notifiche (attualmente non supportate su macOS)</ion-label>
       </ion-item>
       <ion-item-group *ngIf="repeatChecked">
         <ion-item>
-          <ion-label position="fixed">Ogni:</ion-label>
+          <ion-label position="fixed">Avvisami ogni:</ion-label>
           <ion-select [disabled]="!editMode" formControlName="days" multiple>
             <ion-select-option value="1">Lunedì</ion-select-option>
             <ion-select-option value="2">Martedì</ion-select-option>
@@ -60,11 +60,11 @@
             <ion-select-option value="4">Giovedì</ion-select-option>
             <ion-select-option value="5">Venerdì</ion-select-option>
             <ion-select-option value="6">Sabato</ion-select-option>
-            <ion-select-option value="7">Domenica</ion-select-option>
+            <ion-select-option value="0">Domenica</ion-select-option>
           </ion-select>
         </ion-item>
         <ion-item>
-          <ion-label position="fixed">Alle:</ion-label>
+          <ion-label position="fixed">Alle ore:</ion-label>
           <ion-datetime [disabled]="!editMode" formControlName="time" displayFormat="HH mm"></ion-datetime>
         </ion-item>
       </ion-item-group>
