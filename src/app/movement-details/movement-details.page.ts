@@ -1,11 +1,11 @@
-import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
-import {StorageService} from "../services/storage.service";
-import {ToastController} from "@ionic/angular";
-import {ActivatedRoute, Router} from "@angular/router";
-import {MovementReason} from "../../domain-model/MovementReason";
-import {Movement} from "../../domain-model/Movement";
-import {User} from "../../domain-model/User";
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
+import { StorageService } from "../services/storage.service";
+import { ToastController } from "@ionic/angular";
+import { ActivatedRoute, Router } from "@angular/router";
+import { MovementReason } from "../../domain-model/MovementReason";
+import { Movement } from "../../domain-model/Movement";
+import { User } from "../../domain-model/User";
 
 @Component({
   selector: 'app-movement-details',
@@ -51,7 +51,7 @@ export class MovementDetailsPage implements OnInit {
     await this.fillForm();
   }
 
-  private initForm(){
+  private initForm() {
     this.movementFormGroup = this.formBuilder.group({
       name: new FormControl('', [Validators.required]),
       reason: new FormControl('', [Validators.required]),
@@ -64,14 +64,14 @@ export class MovementDetailsPage implements OnInit {
     });
   }
 
-  private async fillForm(){
+  private async fillForm() {
     // Get movement info
     let movementName = this.activatedRoute.snapshot.paramMap.get('name');
     this.movement = await this.storageService.get(movementName);
 
     this.repeatChecked = false;
 
-    if(this.movement.repeat){
+    if (this.movement.repeat) {
 
       document.getElementById('repeatCheckbox').setAttribute('checked', 'true');
 
@@ -90,7 +90,7 @@ export class MovementDetailsPage implements OnInit {
 
   // ----- Handler Section ----- \\
 
-  toggleEditMode(){
+  toggleEditMode() {
     this.editMode = !this.editMode;
   }
 
@@ -115,7 +115,7 @@ export class MovementDetailsPage implements OnInit {
   }
 
   undo() {
-    if(this.activatedRoute.snapshot.paramMap.get('mode') === 'edit'){
+    if (this.activatedRoute.snapshot.paramMap.get('mode') === 'edit') {
       this.router.navigate(['/home']);
     }
     this.fillForm();
@@ -126,7 +126,7 @@ export class MovementDetailsPage implements OnInit {
   getReasonEnum(enumAsString: string): MovementReason {
     return MovementReason[enumAsString.split('.')[1]];
   }
-  
+
   async editMovement() {
     // Check if the form is valid
     if (!this.movementFormGroup.valid) {
@@ -153,10 +153,10 @@ export class MovementDetailsPage implements OnInit {
       this.movementFormGroup.get('otherReasonMessage').value,
       this.movementFormGroup.get('notes').value,
       this.repeatChecked,
-      {days: this.movementFormGroup.get('days').value, time: this.movementFormGroup.get('time').value}
+      { days: this.movementFormGroup.get('days').value, time: this.movementFormGroup.get('time').value }
     );
 
-    if(!newMovement.repeat){
+    if (!newMovement.repeat) {
       newMovement.generationOptions = null;
     }
 

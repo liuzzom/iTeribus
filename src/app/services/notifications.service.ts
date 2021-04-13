@@ -27,30 +27,30 @@ export class NotificationsService {
     });
   }
 
-  public sendNotificationThroughSW() {
+  public sendNotificationThroughSW(title: string, body: string, timeout: number) {
     if (this.swNotificationsGranted) {
       setTimeout(() => {
         navigator.serviceWorker.ready.then(registration => {
-          registration.showNotification('Vibration Sample', {
-            body: 'Buzz! Buzz!',
-            icon: '../images/touch/chrome-touch-icon-192x192.png',
-            vibrate: [200, 100, 200, 100, 200, 100, 200],
-            tag: 'vibration-sample'
+          registration.showNotification(title, {
+            body: body,
+            icon: '../assets/icons/icon-192x192.png',
+            vibrate: [200, 100, 200],
+            tag: 'movement'
           });
         });
-      }, 3000);
+      }, timeout);
     }
 
   }
 
-  public async sendLocalNotification() {
+  public async sendLocalNotification(title: string, body: string, timeout: number) {
     const notifs = await LocalNotifications.schedule({
       notifications: [
         {
-          title: "Title",
-          body: "Body",
-          id: 1,
-          schedule: { at: new Date(Date.now() + 1000 * 5) },
+          title: title,
+          body: body,
+          id: Math.random() * 1000000,
+          schedule: { at: new Date(Date.now() + timeout) },
           sound: null,
           attachments: null,
           actionTypeId: "",
