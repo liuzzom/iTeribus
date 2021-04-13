@@ -61,16 +61,16 @@ export class HomePage implements OnInit {
       if (this.platform.is('desktop')) {
         this.notificationsService.sendLocalNotification(
           movement.name,
-          `Hai uno spostamento ${movement.name} alle ${this.datePipe.transform(movement.generationOptions.time, 'HH:mm')}. ` ,
-           15000
-           );
+          `Hai uno spostamento ${movement.name} alle ${this.datePipe.transform(movement.generationOptions.time, 'HH:mm')}. `,
+          15000
+        );
 
-      } else if (this.platform.is('android')){
+      } else if (this.platform.is('android')) {
         this.notificationsService.sendNotificationThroughSW(
           movement.name,
           `Hai uno spostamento ${movement.name} alle ${this.datePipe.transform(movement.generationOptions.time, 'HH:mm')}. `,
           15000
-          );
+        );
       }
     }
   }
@@ -86,13 +86,13 @@ export class HomePage implements OnInit {
           text: 'SENZA DATA',
           cssClass: 'secondary',
           handler: () => {
-            this.generatePDF(this.movements[index], false)
+            this.generatePDF(this.movements[index], false);
           }
         },
         {
           text: 'PER OGGI',
           handler: () => {
-            this.generatePDF(this.movements[index], true)
+            this.generatePDF(this.movements[index], true);
           }
         },
         {

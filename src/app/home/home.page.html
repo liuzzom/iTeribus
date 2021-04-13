@@ -23,7 +23,7 @@
         <ion-card-content>
           <!-- Buttons Container -->
           <div class="card-buttons-container">
-            <ion-fab-button size="small" href="./movement-details/{{movement.name}}/edit">
+            <ion-fab-button size="small" href="./movement-details/{{movement.name}}/edit" color="secondary">
               <ion-icon name="create-outline"></ion-icon>
             </ion-fab-button>
             <ion-fab-button size="small" color="secondary" (click)="showGenerateAlert(i)">
@@ -41,7 +41,7 @@
 
   <!-- Buttons Section -->
   <ion-fab horizontal="end" vertical="bottom" slot="fixed">
-    <ion-fab-button color="tertiary" href="new-movement">
+    <ion-fab-button color="primary" href="new-movement">
       <ion-icon id="editFab" name="add-outline"></ion-icon>
     </ion-fab-button>
   </ion-fab>

@@ -57,8 +57,8 @@ export class NewUserPage implements OnInit {
 
     // ----- Anagraphic Validators ----- \\
     this.anagraphicFormGroup = this.formBuilder.group({
-      name: new FormControl('', [Validators.required, Validators.pattern('^[A-Z][a-z]*(\ ([A-Z][a-z]*)?)*')]),
-      surname: new FormControl('', [Validators.required, Validators.pattern('^[A-Z][a-z]*(\ ([A-Z][a-z]*)?)*')]),
+      name: new FormControl('', [Validators.required, Validators.pattern('[A-z[a-z]*(\ ([A-Z[a-z]*)?)*')]),
+      surname: new FormControl('', [Validators.required, Validators.pattern('[A-z[a-z]*(\ ([A-Z[a-z]*)?)*')]),
       dateOfBirth: new FormControl('', [Validators.required]),
       birthRegion: new FormControl('', [Validators.required]),
       birthProvince: new FormControl('', [Validators.required]),
@@ -224,8 +224,8 @@ export class NewUserPage implements OnInit {
 
   addUserInfo() {
 
-    const name = this.capitalize(this.anagraphicFormGroup.get('name').value);
-    const surname = this.capitalize(this.anagraphicFormGroup.get('surname').value);
+    const name = this.capitalize(this.anagraphicFormGroup.get('name').value.toLowerCase());
+    const surname = this.capitalize(this.anagraphicFormGroup.get('surname').value.toLowerCase());
 
     let userData: User = {
       name: name,
