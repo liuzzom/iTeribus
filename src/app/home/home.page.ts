@@ -55,24 +55,40 @@ export class HomePage implements OnInit {
     this.movements = await this.storageService.getMovements();
     this.showNoMovementsMsg = this.movements.length === 0;
 
-    const movement = this.movements[0];
+    const todayMovements = this.getTodayMovements(this.movements);
+    const firstMovementOfToday = todayMovements[0];
 
-    if (movement.repeat) {
+    if (firstMovementOfToday && firstMovementOfToday.repeat) {
       if (this.platform.is('desktop')) {
         this.notificationsService.sendLocalNotification(
-          movement.name,
-          `Hai uno spostamento ${movement.name} alle ${this.datePipe.transform(movement.generationOptions.time, 'HH:mm')}. `,
+          firstMovementOfToday.name,
+          `Hai uno spostamento ${firstMovementOfToday.name} alle ${this.datePipe.transform(firstMovementOfToday.generationOptions.time, 'HH:mm')}. `,
           15000
         );
 
       } else if (this.platform.is('android')) {
         this.notificationsService.sendNotificationThroughSW(
-          movement.name,
-          `Hai uno spostamento ${movement.name} alle ${this.datePipe.transform(movement.generationOptions.time, 'HH:mm')}. `,
+          firstMovementOfToday.name,
+          `Hai uno spostamento ${firstMovementOfToday.name} alle ${this.datePipe.transform(firstMovementOfToday.generationOptions.time, 'HH:mm')}. `,
           15000
         );
       }
     }
+  }
+
+  private getTodayMovements(movements: Movement[]) {
+    const today = new Date().getDay();
+
+    let todayMovements = movements.filter(movement => {
+      const daysAsStringList: string[] = [];
+      if (movement.repeat) {
+        for (const day of movement.generationOptions.days) {
+          daysAsStringList.push(day.toString());
+        }
+      }
+      return movement.repeat && movement.generationOptions && daysAsStringList.includes(today.toString());
+    });
+    return todayMovements.sort((a,b) => a.generationOptions.time <= b.generationOptions.time ? 1 : -1 ) ;
   }
 
 
