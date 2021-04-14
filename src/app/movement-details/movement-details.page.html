@@ -71,17 +71,17 @@
     </form>
 
     <!-- Buttons Section -->
-    <ion-fab horizontal="end" vertical="bottom">
+    <ion-fab horizontal="end" vertical="bottom" slot="fixed">
       <!-- View Buttons -->
       <ion-row *ngIf="!editMode; else saveUndoButtons">
         <ion-col>
           <ion-fab-button color="tertiary" (click)="goHome()">
-            <ion-icon id="goHome" name="arrow-undo-outline"></ion-icon>
+            <ion-icon id="goHome" src="/assets/icons/arrow-undo-outline.svg"></ion-icon>
           </ion-fab-button>
         </ion-col>
         <ion-col>
           <ion-fab-button color="primary" (click)="toggleEditMode()">
-            <ion-icon id="editFab" name="create-outline"></ion-icon>
+            <ion-icon id="editFab" src="/assets/icons/create-outline.svg"></ion-icon>
           </ion-fab-button>
         </ion-col>
       </ion-row>
@@ -90,12 +90,12 @@
         <ion-row>
           <ion-col>
             <ion-fab-button id="undoFab" color="tertiary" (click)="undo()">
-              <ion-icon name="arrow-undo-outline"></ion-icon>
+              <ion-icon name="/assets/icons/arrow-undo-outline.svg"></ion-icon>
             </ion-fab-button>
           </ion-col>
           <ion-col>
             <ion-fab-button id="saveFab" color="primary" (click)="editMovement()">
-              <ion-icon name="save-outline"></ion-icon>
+              <ion-icon src="/assets/icons/save-outline.svg"></ion-icon>
             </ion-fab-button>
           </ion-col>
         </ion-row>

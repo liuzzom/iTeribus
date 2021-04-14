@@ -4,7 +4,7 @@
     <h3 *ngIf="showNoMovementsMsg">
       <em>Nessuno spostamento inserito.</em><br>
       <em>Premi </em>
-      <ion-icon name="add-circle-outline"></ion-icon>
+      <ion-icon src="/assets/icons/add-circle-outline.svg"></ion-icon>
       <em> per inserirne uno!</em><br>
       <img src="assets/icon/jt_gif.gif" alt="">
     </h3>
@@ -24,14 +24,14 @@
           <!-- Buttons Container -->
           <div class="card-buttons-container">
             <ion-fab-button size="small" href="./movement-details/{{movement.name}}/edit" color="secondary">
-              <ion-icon name="create-outline"></ion-icon>
+              <ion-icon src="/assets/icons/create-outline.svg"></ion-icon>
             </ion-fab-button>
             <ion-fab-button size="small" color="secondary" (click)="showGenerateAlert(i)">
-              <ion-icon name="print-outline"></ion-icon>
+              <ion-icon src="/assets/icons/print-outline.svg"></ion-icon>
             </ion-fab-button>
             <!-- Delete Button -->
             <ion-fab-button size="small" color="danger" (click)="showDeleteAlert(i)">
-              <ion-icon name="trash-outline"></ion-icon>
+              <ion-icon src="/assets/icons/trash-outline.svg"></ion-icon>
             </ion-fab-button>
           </div>
         </ion-card-content>
@@ -42,7 +42,7 @@
   <!-- Buttons Section -->
   <ion-fab horizontal="end" vertical="bottom" slot="fixed">
     <ion-fab-button color="primary" href="new-movement">
-      <ion-icon id="editFab" name="add-outline"></ion-icon>
+      <ion-icon id="editFab" src="/assets/icons/add-outline.svg"></ion-icon>
     </ion-fab-button>
   </ion-fab>
 

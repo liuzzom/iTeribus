@@ -206,11 +206,11 @@
     </mat-vertical-stepper>
 
     <!-- Save Fab Button -->
-    <ion-fab *ngIf="userStepper.selectedIndex === 3" horizontal="end" vertical="bottom">
+    <ion-fab *ngIf="userStepper.selectedIndex === 3" horizontal="end" vertical="bottom" slot="fixed">
       <ion-fab-button id="saveFab" color="primary" (click)="addUserInfo()">
-        <ion-icon name="save-outline"></ion-icon>
+        <ion-icon src="/assets/icons/save-outline.svg"></ion-icon>
       </ion-fab-button>
     </ion-fab>
   </div>
-  <ion-icon name="arrow-undo-outline" style="display: none;"></ion-icon>
+  <ion-icon src="/assets/icons/arrow-undo-outline.svg" style="display: none;"></ion-icon>
 </ion-content>
