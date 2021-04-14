@@ -13,7 +13,7 @@ export class AppComponent {
 
   public async share() {
     await Share.share({
-      title: 'ITeribus',
+      title: 'ITineribus',
       text: 'Una App per semplificare la creazione di autocertificazioni per gli spostamenti.',
       url: 'https://itineribus-832f3.web.app/',
       dialogTitle: 'Condividi con un Amico'

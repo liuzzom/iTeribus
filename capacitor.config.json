@@ -1,6 +1,6 @@
 {
   "appId": "io.ionic.starter",
-  "appName": "iTeribus",
+  "appName": "ITineribus",
   "bundledWebRuntime": false,
   "npmClient": "npm",
   "webDir": "www",
