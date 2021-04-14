@@ -93,8 +93,7 @@ export class UserInfoPage implements OnInit {
       birthRegion: new FormControl('', [Validators.required]),
       birthProvince: new FormControl('', [Validators.required]),
       birthMunicipality: new FormControl('', [Validators.required]),
-      phoneNumber: new FormControl('', [Validators.required, Validators.pattern('^\\+?[0-9\ ]*')]),
-      email: new FormControl('', Validators.email)
+      phoneNumber: new FormControl('', [Validators.required, Validators.pattern('^\\+?[0-9\ ]*')])
     });
 
     // ----- Document Validators ----- \\
@@ -136,7 +135,6 @@ export class UserInfoPage implements OnInit {
       });
     });
     this.anagraphicFormGroup.get('phoneNumber').setValue(this.user.phoneNumber);
-    this.anagraphicFormGroup.get('email').setValue(this.user.email);
 
     // Document Section \\
     this.documentFormGroup.get('type').setValue(this.user.document.type);
@@ -366,7 +364,6 @@ export class UserInfoPage implements OnInit {
         null
       ),
       phoneNumber: this.anagraphicFormGroup.get('phoneNumber').value.replaceAll(' ', ''),
-      email: this.anagraphicFormGroup.get('email').value,
       document: new Document(
         this.documentFormGroup.get('type').value,
         this.documentFormGroup.get('number').value.replaceAll(' ', '').toUpperCase(),

@@ -169,7 +169,6 @@ export class HomePage implements OnInit {
   }
 
   generatePDF(movement, date: boolean) {
-    console.log('generation....')
     this.pdfGeneratorService.fillForm(this.user, movement, date).then(() => console.log('Form generated'));
   }
 }

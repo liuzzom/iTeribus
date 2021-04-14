@@ -6,7 +6,6 @@ export class User{
     dateOfBirth: Date;
     birthPlace?: Place;
     phoneNumber: string;
-    email: string;
     document: Document;
     residence: Place;
     domicile: Place;

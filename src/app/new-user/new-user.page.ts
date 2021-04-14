@@ -63,8 +63,7 @@ export class NewUserPage implements OnInit {
       birthRegion: new FormControl('', [Validators.required]),
       birthProvince: new FormControl('', [Validators.required]),
       birthMunicipality: new FormControl('', [Validators.required]),
-      phoneNumber: new FormControl('', [Validators.required, Validators.pattern('^\\+?[0-9\ ]*')]),
-      email: new FormControl('', Validators.email)
+      phoneNumber: new FormControl('', [Validators.required, Validators.pattern('^\\+?[0-9\ ]*')])
     });
 
     // ----- Document Validators ----- \\
@@ -238,7 +237,6 @@ export class NewUserPage implements OnInit {
         null
       ),
       phoneNumber: this.anagraphicFormGroup.get('phoneNumber').value.replaceAll(' ', ''),
-      email: this.anagraphicFormGroup.get('email').value,
       document: new Document(
         this.documentFormGroup.get('type').value,
         this.documentFormGroup.get('number').value.replaceAll(' ', '').toUpperCase(),
