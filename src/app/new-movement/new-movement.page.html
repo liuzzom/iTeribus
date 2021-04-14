@@ -5,7 +5,7 @@
       <ion-item-group>
         <ion-item>
           <ion-label position="floating">Nome</ion-label>
-          <ion-input formControlName="name"></ion-input>
+          <ion-input formControlName="name" placeholder="(Obbligatorio) Es: Lavoro, Spesa ..."></ion-input>
         </ion-item>
       </ion-item-group>
       <!--Motivazione Spostamento-->
@@ -23,25 +23,25 @@
           </ion-select>
         </ion-item>
         <ion-item *ngIf="other">
-          <ion-input formControlName="otherReasonMessage" placeholder="Specificare la Motivazione (Obbligatorio)"></ion-input>
+          <ion-input formControlName="otherReasonMessage" placeholder="(Obbligatorio) Specificare la Motivazione "></ion-input>
         </ion-item>
       </ion-item-group>
       <!--Partenza & Destinazione-->
       <ion-item-group>
         <ion-item>
           <ion-label position="floating">Indirizzo di Partenza</ion-label>
-          <ion-input formControlName="departure"></ion-input>
+          <ion-input formControlName="departure" placeholder="Es. : Piazza G. Matteotti 1, Scandicci (FI)"></ion-input>
         </ion-item>
         <ion-item>
           <ion-label position="floating">Indirizzo di Destinazione</ion-label>
-          <ion-input formControlName="destination"></ion-input>
+          <ion-input formControlName="destination" placeholder="Es. : Viale Calimala 1, Firenze (FI)"></ion-input>
         </ion-item>
       </ion-item-group>
       <!--Dichiarazioni Addizionali-->
       <ion-item-group>
         <ion-item>
           <ion-label position="floating">Dichiarazioni Addizionali</ion-label>
-          <ion-textarea formControlName="notes"></ion-textarea>
+          <ion-textarea formControlName="notes" placeholder="(Opzionale) Inserisci ulteriori informazioni utili riguardanti lo spostamento."></ion-textarea>
         </ion-item>
       </ion-item-group>
     </form>
