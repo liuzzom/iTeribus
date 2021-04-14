@@ -145,6 +145,10 @@ export class MovementDetailsPage implements OnInit {
       return;
     }
 
+    if (this.movementFormGroup.get('name').value !== this.movement.name) {
+      this.storageService.remove(this.movement.name);
+    }
+
     // Create Movement object
     const newMovement = new Movement(
       this.movementFormGroup.get('name').value,
